@@ -1,13 +1,23 @@
-import Link from "#/renderer/Link.tsx";
 import { DocumentProps } from "#/renderer/types.ts";
+import { useEffect, useState } from "react";
+import { navigate } from "vite-plugin-ssr/client/router";
+import NameForm from "#/components/NameForm.tsx";
+
+import GlobalLayout from "#/layouts/Global.tsx";
+
+export const Layout = GlobalLayout;
 
 export const Page = () => {
-  return (
-    <div>
-      <h1 className={"text-2xl"}>Home page</h1>
-      <Link href={"/about"}>About</Link>
-    </div>
-  );
+  const [name, setName] = useState<string | null>(null);
+
+  useEffect(() => {
+    setName(localStorage.getItem("name"));
+    if (name) {
+      navigate("/game");
+    }
+  }, [name]);
+
+  return <NameForm />;
 };
 
 export const documentProps: DocumentProps = {
