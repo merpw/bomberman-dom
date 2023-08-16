@@ -4,10 +4,10 @@ import { RootState } from "#/store/store";
 import { wsConnectionActions } from "#/store/ws/connection";
 import wsActions from "#/store/ws/actions";
 import wsHandlers, { WebSocketMessage } from "#/store/ws/handlers.ts";
+import { getName } from "#/helpers/getName.ts";
 
 const wsConnectionMiddleware: Middleware = (store) => {
   let ws: WebSocket;
-  let username: string;
   let retryTimeout = 0;
 
   return (next) => (action) => {
@@ -17,6 +17,7 @@ const wsConnectionMiddleware: Middleware = (store) => {
     }
 
     if (wsActions.close.match(action)) {
+      console.log("ws closed");
       ws.close();
       store.dispatch(wsConnectionActions.connectionClosed());
       return next(action);
@@ -29,7 +30,7 @@ const wsConnectionMiddleware: Middleware = (store) => {
         // already connected or connecting
         return next(action);
       }
-      username = action.payload.username;
+      const username = action.payload.username;
 
       store.dispatch(wsConnectionActions.connectionStarted());
 
@@ -79,6 +80,10 @@ const wsConnectionMiddleware: Middleware = (store) => {
     }
 
     if (state.wsConnection.status === "disconnected") {
+      const username = getName();
+      if (!username) {
+        return next(action);
+      }
       store.dispatch(wsActions.connect({ username }));
     }
 
