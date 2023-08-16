@@ -12,7 +12,7 @@ import (
 func (h *Handlers) PrimaryHandler() ws.MessageHandler {
 
 	var events = []Event{
-		newEvent("test", h.test),
+		newEvent("chat/message", h.chatMessage),
 	}
 
 	return func(messageBody []byte, client *ws.Client) {
