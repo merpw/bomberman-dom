@@ -2,6 +2,7 @@ import { FC, ReactNode } from "react";
 import Chat from "#/components/Chat.tsx";
 import { Provider } from "react-redux";
 import store from "#/store/store.ts";
+import UserInfo from "#/components/UserInfo.tsx";
 
 const GameLayout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
@@ -9,6 +10,7 @@ const GameLayout: FC<{ children: ReactNode }> = ({ children }) => {
       <Provider store={store}>
         <main className={"grow h-full"}>{children}</main>
         <aside>
+          <UserInfo />
           <Chat />
         </aside>
       </Provider>
