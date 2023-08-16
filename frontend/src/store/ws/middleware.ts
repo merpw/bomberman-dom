@@ -2,7 +2,7 @@ import { Middleware } from "redux";
 
 import { RootState } from "#/store/store";
 import { wsConnectionActions } from "#/store/ws/connection";
-import wsActions from "#/store/ws/actions";
+import wsActions, { sendWSMessage } from "#/store/ws/actions";
 import wsHandlers, { WebSocketMessage } from "#/store/ws/handlers.ts";
 
 const wsConnectionMiddleware: Middleware = (store) => {
@@ -33,13 +33,20 @@ const wsConnectionMiddleware: Middleware = (store) => {
       store.dispatch(wsConnectionActions.connectionStarted());
 
       ws = new WebSocket(
-        `${location.protocol.replace("http", "ws")}//${
-          location.host
-        }/ws?name=${username}`
+        `${location.protocol.replace("http", "ws")}//${location.host}/ws`
       );
       ws.onopen = () => {
         console.log("ws connected");
         store.dispatch(wsConnectionActions.connectionEstablished());
+
+        store.dispatch(
+          sendWSMessage({
+            type: "join",
+            item: {
+              username,
+            },
+          })
+        );
       };
       ws.onclose = () => {
         console.log("ws disconnected");

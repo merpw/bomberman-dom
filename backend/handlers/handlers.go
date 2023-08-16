@@ -13,7 +13,7 @@ func (h *Handlers) PrimaryHandler() ws.MessageHandler {
 
 	var events = []Event{
 		newEvent("chat/message", h.chatMessage),
-		newEvent("internal/connect", h.internalConnect),
+		newEvent("join", h.join),
 		newEvent("internal/disconnect", h.internalDisconnect),
 	}
 

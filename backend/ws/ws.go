@@ -71,9 +71,6 @@ func (h *Hub) UpgradeHandler(w http.ResponseWriter, r *http.Request) {
 		h.MessageHandler(NewMessage("internal/disconnect", nil), client)
 		h.Unregister(client)
 	}()
-
-	name := r.URL.Query().Get("name")
-	h.MessageHandler(NewMessage("internal/connect", name), client)
 }
 
 // Register registers new Client in the Hub

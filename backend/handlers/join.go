@@ -6,12 +6,17 @@ import (
 	"log"
 )
 
-func (h *Handlers) internalConnect(message ws.Message, client *ws.Client) {
-	var name string
-	err := json.Unmarshal(message.Item, &name)
+// join is a handler for `type: 'join'` event, it adds player to game
+func (h *Handlers) join(message ws.Message, client *ws.Client) {
+	var joinItem struct {
+		Username string `json:"username"`
+	}
+	err := json.Unmarshal(message.Item, &joinItem)
 	if err != nil {
 		log.Println(err)
 	}
+
+	name := joinItem.Username
 
 	isFull := true
 	for _, player := range h.Game.Players {
@@ -43,7 +48,7 @@ func (h *Handlers) internalConnect(message ws.Message, client *ws.Client) {
 
 	h.Game.AddPlayer(name, client)
 
-	h.Hub.Broadcast(ws.NewMessage("users/connect", struct {
+	h.Hub.Broadcast(ws.NewMessage("users/join", struct {
 		Username string `json:"username"`
 	}{
 		Username: name,
