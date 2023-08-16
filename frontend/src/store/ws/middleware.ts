@@ -4,11 +4,9 @@ import { RootState } from "#/store/store";
 import { wsConnectionActions } from "#/store/ws/connection";
 import wsActions from "#/store/ws/actions";
 import wsHandlers, { WebSocketMessage } from "#/store/ws/handlers.ts";
-import { getName } from "#/helpers/getName.ts";
 
 const wsConnectionMiddleware: Middleware = (store) => {
   let ws: WebSocket;
-  let retryTimeout = 0;
 
   return (next) => (action) => {
     if (Object.values(wsConnectionActions).find((a) => a.match(action))) {
@@ -42,15 +40,10 @@ const wsConnectionMiddleware: Middleware = (store) => {
       ws.onopen = () => {
         console.log("ws connected");
         store.dispatch(wsConnectionActions.connectionEstablished());
-        retryTimeout = 0;
       };
       ws.onclose = () => {
         console.log("ws disconnected");
-        setTimeout(() => {
-          retryTimeout += 1000;
-          store.dispatch(wsConnectionActions.connectionClosed());
-          store.dispatch(wsActions.connect({ username }));
-        }, retryTimeout);
+        store.dispatch(wsConnectionActions.connectionClosed());
       };
 
       ws.onmessage = (event) => {
@@ -59,6 +52,8 @@ const wsConnectionMiddleware: Middleware = (store) => {
 
           if (data.type === "error") {
             console.error("ws error", data);
+            const message = data.item as string;
+            store.dispatch(wsConnectionActions.setConnectionError(message));
             return;
           }
 
@@ -75,25 +70,14 @@ const wsConnectionMiddleware: Middleware = (store) => {
           console.error("ws error", e);
         }
       };
-
-      return next(action);
-    }
-
-    if (state.wsConnection.status === "disconnected") {
-      const username = getName();
-      if (!username) {
-        return next(action);
-      }
-      store.dispatch(wsActions.connect({ username }));
     }
 
     if (wsActions.sendRaw.match(action)) {
-      if (state.wsConnection.status !== "connected") {
+      if (state.wsConnection.status === "connecting") {
         // not connected yet, retry later
         setTimeout(() => {
           store.dispatch(action);
-        }, retryTimeout + 100);
-
+        }, 100);
         return next(action);
       }
 

@@ -1,9 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: {
   status: "connecting" | "connected" | "disconnected";
+  error: string | null;
 } = {
   status: "disconnected",
+  error: null,
 };
 
 const wsConnectionSlice = createSlice({
@@ -18,6 +20,9 @@ const wsConnectionSlice = createSlice({
     },
     connectionClosed: (state) => {
       state.status = "disconnected";
+    },
+    setConnectionError: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
     },
   },
 });
