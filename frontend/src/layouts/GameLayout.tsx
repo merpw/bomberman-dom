@@ -1,10 +1,20 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useEffect } from "react";
 import Chat from "#/components/Chat.tsx";
 import { Provider } from "react-redux";
 import store from "#/store/store.ts";
 import UserInfo from "#/components/UserInfo.tsx";
 
 const GameLayout: FC<{ children: ReactNode }> = ({ children }) => {
+  useEffect(() => {
+    window.onbeforeunload = () => {
+      return "Are you sure you want to leave?";
+    };
+
+    return () => {
+      window.onbeforeunload = null;
+    };
+  }, []);
+
   return (
     <div className={"container mx-auto flex h-full"}>
       <Provider store={store}>
