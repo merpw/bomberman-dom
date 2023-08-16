@@ -36,7 +36,18 @@ const NameForm: FC = () => {
   return (
     <form onSubmit={handleSubmit}>
       <h1>Choose your name</h1>
-      <input type="text" name={"name"} placeholder="Enter your name" required />
+      <input
+        className={"input"}
+        type="text"
+        name={"name"}
+        placeholder="Enter your name"
+        required
+      />
+
+      <button type="submit" className={"btn"}>
+        Submit
+      </button>
+      {error && <p>{error}</p>}
     </form>
   );
 };

@@ -16,10 +16,10 @@ const GameLayout: FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   return (
-    <div className={"container mx-auto flex h-full"}>
+    <div className={"container mx-auto flex h-full py-10"}>
       <Provider store={store}>
-        <main className={"grow h-full"}>{children}</main>
-        <aside>
+        <main className={"grow"}>{children}</main>
+        <aside className={"bg-base-100 rounded w-72"}>
           <UserInfo />
           <Chat />
         </aside>

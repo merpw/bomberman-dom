@@ -13,8 +13,7 @@ const Chat = () => {
   }, [dispatch]);
 
   return (
-    <div>
-      <h1>Chat</h1>
+    <div className={"mx-1 flex flex-col max-h-[90%]"}>
       <ChatMessages />
       <ChatInput />
     </div>
@@ -24,15 +23,25 @@ const Chat = () => {
 const ChatMessages = () => {
   const messages = useAppSelector((state) => state.chats.messages);
 
+  if (messages.length === 0) {
+    return (
+      <h1 className={"text-base-content text-sm text-center my-2"}>Chat</h1>
+    );
+  }
+
   return (
-    <div>
-      {messages.map((message, key) => (
-        <div key={key}>
-          <p>
-            {message.username}: {message.content}
-          </p>
-        </div>
-      ))}
+    <div className={"mx-1 my-2 grow overflow-y-scroll flex flex-col-reverse"}>
+      {messages
+        .slice()
+        .reverse()
+        .map((message, key) => (
+          <div key={key}>
+            <span className={"text-info" /* TODO: add different colors */}>
+              {message.username}:{" "}
+            </span>{" "}
+            <span>{message.content}</span>
+          </div>
+        ))}
     </div>
   );
 };
@@ -46,6 +55,9 @@ const ChatInput = () => {
     const form = e.currentTarget;
 
     const content = e.currentTarget.content.value as string;
+    if (!content) {
+      return;
+    }
 
     const username = getName();
     if (!username) {
@@ -58,9 +70,11 @@ const ChatInput = () => {
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <input type="text" name={"content"} />
-      <button type="submit">Send</button>
+    <form onSubmit={onSubmit} className={"flex flex-col gap-1"}>
+      <input type="text" name={"content"} className={"input input-bordered"} />
+      <button type="submit" className={"btn ml-auto"}>
+        Send
+      </button>
     </form>
   );
 };
