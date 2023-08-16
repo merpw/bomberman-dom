@@ -27,6 +27,7 @@ func main() {
 	handler.Hub = hub
 
 	http.HandleFunc("/ws", hub.UpgradeHandler)
+	http.HandleFunc("/api/status", hub.StatusHandler)
 
 	httpServer := http.Server{
 		Handler:           http.DefaultServeMux,

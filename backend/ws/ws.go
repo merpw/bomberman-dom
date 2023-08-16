@@ -85,6 +85,7 @@ func (h *Hub) UpgradeHandler(w http.ResponseWriter, r *http.Request) {
 
 	go func() {
 		client.Read(h.MessageHandler)
+		log.Println("Connection closed: ", r.RemoteAddr)
 		h.Unregister(client)
 	}()
 }
