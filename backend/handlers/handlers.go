@@ -2,8 +2,8 @@
 package handlers
 
 import (
+	"backend/game"
 	"backend/ws"
-	"encoding/json"
 	"log"
 	"runtime/debug"
 )
@@ -13,22 +13,16 @@ func (h *Handlers) PrimaryHandler() ws.MessageHandler {
 
 	var events = []Event{
 		newEvent("chat/message", h.chatMessage),
+		newEvent("internal/connect", h.internalConnect),
+		newEvent("internal/disconnect", h.internalDisconnect),
 	}
 
-	return func(messageBody []byte, client *ws.Client) {
+	return func(message ws.Message, client *ws.Client) {
 		defer func() {
 			if r := recover(); r != nil {
 				log.Printf("ERROR 500, %s\n%s", r, debug.Stack())
 			}
 		}()
-
-		log.Printf("received from %s %s\n", client.Conn.RemoteAddr(), messageBody)
-
-		var message ws.Message
-		err := json.Unmarshal(messageBody, &message)
-		if err != nil {
-			log.Println(err)
-		}
 
 		for _, event := range events {
 			if event.Type == message.Type {
@@ -42,12 +36,15 @@ func (h *Handlers) PrimaryHandler() ws.MessageHandler {
 }
 
 type Handlers struct {
-	Hub *ws.Hub
+	Hub  *ws.Hub
+	Game *game.Game
 }
 
 // New connects database to Handlers
 func New() *Handlers {
-	return &Handlers{}
+	return &Handlers{
+		Game: game.NewGame(),
+	}
 }
 
 // Event is a websocket event (server.Route analog)

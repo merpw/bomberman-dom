@@ -1,4 +1,4 @@
-package ws
+package handlers
 
 import (
 	"encoding/json"
@@ -14,25 +14,25 @@ const (
 	GameStateFinished GameState = "finished"
 )
 
-type Status struct {
+type GameStatus struct {
 	Users     []string  `json:"users"`
 	GameState GameState `json:"gameState"`
 }
 
-// StatusHandler is an HTTP handler that returns the current status of the server
-func (h *Hub) StatusHandler(w http.ResponseWriter, r *http.Request) {
+// Status is an HTTP handler that returns the current GameStatus of the server
+func (h *Handlers) Status(w http.ResponseWriter, r *http.Request) {
 
-	users := make([]string, 0, len(h.Clients))
-	for _, client := range h.Clients {
+	users := make([]string, 0, len(h.Game.Players))
+	for _, client := range h.Game.Players {
 		users = append(users, client.Name)
 	}
 
-	status := Status{
+	status := GameStatus{
 		Users:     users,
 		GameState: GameStateWaiting,
 	}
 
-	// send status:
+	// send GameStatus:
 	SendObject(w, status)
 }
 

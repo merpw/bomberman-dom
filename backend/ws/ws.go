@@ -23,7 +23,7 @@ type Hub struct {
 }
 
 // MessageHandler is a function that handles raw messages from the Client
-type MessageHandler func(p []byte, client *Client)
+type MessageHandler func(message Message, client *Client)
 
 // NewHub creates new Hub with specified primary MessageHandler
 func NewHub(messageHandler MessageHandler) *Hub {
@@ -54,24 +54,6 @@ func (h *Hub) UpgradeHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	name := r.URL.Query().Get("name")
-	if name == "" {
-		http.Error(w, "Name is not valid", http.StatusBadRequest)
-		return
-	}
-
-	isNameTaken := false
-	for _, client := range h.Clients {
-		if client.Name == name {
-			isNameTaken = true
-			break
-		}
-	}
-	if isNameTaken {
-		http.Error(w, "Name is already taken", http.StatusBadRequest)
-		return
-	}
-
 	conn, err := wsUpgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
@@ -80,14 +62,18 @@ func (h *Hub) UpgradeHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("New connection from ", r.RemoteAddr)
 
-	client := NewClient(conn, name)
+	client := NewClient(conn)
 	h.Register(client)
 
 	go func() {
 		client.Read(h.MessageHandler)
 		log.Println("Connection closed: ", r.RemoteAddr)
+		h.MessageHandler(NewMessage("internal/disconnect", nil), client)
 		h.Unregister(client)
 	}()
+
+	name := r.URL.Query().Get("name")
+	h.MessageHandler(NewMessage("internal/connect", name), client)
 }
 
 // Register registers new Client in the Hub
@@ -110,7 +96,6 @@ func (h *Hub) Unregister(client *Client) {
 			break
 		}
 	}
-	// TODO: broadcast disconnection info
 	h.mu.Unlock()
 }
 

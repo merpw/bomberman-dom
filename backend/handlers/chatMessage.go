@@ -13,6 +13,11 @@ type chatMessageItem struct {
 
 // chatMessage is a handler for chat/message event
 func (h *Handlers) chatMessage(message ws.Message, client *ws.Client) {
+	player := h.Game.GetPlayer(client)
+	if player == nil {
+		log.Println("WARN: player not found")
+		return
+	}
 	var item chatMessageItem
 	err := json.Unmarshal(message.Item, &item)
 	if err != nil {
@@ -25,7 +30,7 @@ func (h *Handlers) chatMessage(message ws.Message, client *ws.Client) {
 	}
 
 	if item.Username == "" {
-		item.Username = client.Name
+		item.Username = player.Name
 	}
 
 	h.Hub.Broadcast(ws.NewMessage("chat/message", item))
