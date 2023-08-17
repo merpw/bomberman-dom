@@ -30,7 +30,7 @@ const ChatMessages = () => {
   }
 
   return (
-    <div className={"mx-1 my-2 grow overflow-y-scroll flex flex-col-reverse"}>
+    <div className={"mx-1 my-2 grow overflow-y-auto flex flex-col-reverse"}>
       {messages
         .slice()
         .reverse()
@@ -71,7 +71,12 @@ const ChatInput = () => {
 
   return (
     <form onSubmit={onSubmit} className={"flex flex-col gap-1"}>
-      <input type="text" name={"content"} className={"input input-bordered"} />
+      <input
+        type="text"
+        name={"content"}
+        className={"input input-bordered"}
+        autoComplete={"off"}
+      />
       <button type="submit" className={"btn ml-auto"}>
         Send
       </button>
