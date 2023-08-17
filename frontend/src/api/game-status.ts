@@ -1,6 +1,8 @@
+import { GameState } from "#/store/game";
+
 type GameStatus = {
   users: string[];
-  gameState: "waiting" | "playing" | "finished";
+  gameState: GameState;
 };
 
 export const getGameStatus = async () =>

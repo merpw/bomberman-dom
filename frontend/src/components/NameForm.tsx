@@ -18,7 +18,11 @@ const NameForm: FC = () => {
     try {
       const gameStatus = await getGameStatus();
       console.log(gameStatus);
-      if (gameStatus.gameState !== "waiting") {
+      if (
+        gameStatus.gameState === "playing" ||
+        gameStatus.gameState === "starting" ||
+        gameStatus.gameState === "finished"
+      ) {
         setError("Game is already started");
         return;
       }
