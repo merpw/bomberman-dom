@@ -11,7 +11,6 @@ const NameForm: FC = () => {
     if (!inputName) {
       return;
     }
-    localStorage.setItem("name", inputName.toString());
 
     try {
       const gameStatus = await getGameStatus();
@@ -21,10 +20,18 @@ const NameForm: FC = () => {
         return;
       }
 
-      if (gameStatus?.users.includes(inputName)) {
+      if (gameStatus.users.includes(inputName)) {
         setError("This username is already taken");
         return;
       }
+
+      const isFull = gameStatus.users.findIndex((user) => !user) === -1;
+      if (isFull) {
+        setError("Game is full");
+        return;
+      }
+
+      localStorage.setItem("name", inputName.toString());
     } catch (e) {
       setError(e as string);
       return;
