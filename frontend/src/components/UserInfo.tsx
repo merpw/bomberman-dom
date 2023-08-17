@@ -1,16 +1,13 @@
-import { useEffect, useState } from "react";
 import { navigate } from "vite-plugin-ssr/client/router";
-import { getName } from "#/helpers/getName.ts";
+import { useSetUsername, useUsername } from "#/helpers/name.ts";
 import wsActions from "#/store/ws/actions.ts";
 import { useAppDispatch } from "#/store/hooks.ts";
 
 const UserInfo = () => {
-  const [username, setUsername] = useState<string>();
-  const dispatch = useAppDispatch();
+  const username = useUsername();
+  const setUsername = useSetUsername();
 
-  useEffect(() => {
-    setUsername(getName() || undefined);
-  }, []);
+  const dispatch = useAppDispatch();
 
   return (
     <div
@@ -20,7 +17,7 @@ const UserInfo = () => {
       <button
         className={"btn btn-sm btn-ghost opacity-70 hover:opacity-100"}
         onClick={() => {
-          localStorage.removeItem("name");
+          setUsername(null);
           dispatch(wsActions.close());
           navigate("/");
         }}

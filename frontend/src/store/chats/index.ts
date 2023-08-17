@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WebSocketMessage, WSHandler } from "#/store/ws/handlers.ts";
-import { sendWSMessage } from "#/store/ws/actions.ts";
 
 export type ChatMessage = {
   username: string;
@@ -36,13 +35,5 @@ export const chatHandlers: WSHandler[] = [
     handler: chatActions.handleChatMessage,
   },
 ];
-
-export const sendChatMessage = (content: string) =>
-  sendWSMessage({
-    type: "chat/message",
-    item: {
-      content,
-    },
-  });
 
 export default chatSlice.reducer;

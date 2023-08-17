@@ -4,17 +4,17 @@ import { navigate } from "vite-plugin-ssr/client/router";
 import NameForm from "#/components/NameForm.tsx";
 
 import GlobalLayout from "#/layouts/Global.tsx";
-import { getName } from "#/helpers/getName.ts";
+import { useUsername } from "#/helpers/name.ts";
 
 export const Layout = GlobalLayout;
 
 export const Page = () => {
+  const name = useUsername();
   useEffect(() => {
-    const name = getName();
     if (name) {
       navigate("/game");
     }
-  }, []);
+  }, [name]);
 
   return <NameForm />;
 };

@@ -3,8 +3,10 @@ import { WebSocketMessage } from "#/store/ws/handlers.ts";
 
 const initialState: {
   users: string[];
+  username: string | null;
 } = {
   users: [],
+  username: null,
 };
 
 const usersSlice = createSlice({
@@ -20,6 +22,9 @@ const usersSlice = createSlice({
       ) => ({
         payload: message.item.users,
       }),
+    },
+    setUsername: (state, action: PayloadAction<string | null>) => {
+      state.username = action.payload;
     },
   },
 });

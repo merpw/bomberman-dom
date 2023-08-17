@@ -1,18 +1,19 @@
 import { useAppDispatch, useAppSelector } from "#/store/hooks.ts";
 import { FC, FormEvent, useEffect } from "react";
 import wsActions from "#/store/ws/actions.ts";
-import { getName } from "#/helpers/getName.ts";
+import { useUsername } from "#/helpers/name.ts";
 import { ChatMessage } from "#/store/chats";
 import useHeroColor from "#/components/game/heroes.ts";
 
 const Chat = () => {
   const dispatch = useAppDispatch();
+  const username = useUsername();
+
   useEffect(() => {
-    const username = getName();
     if (!username) return;
 
     dispatch(wsActions.connect({ username }));
-  }, [dispatch]);
+  }, [dispatch, username]);
 
   return (
     <div className={"mx-1 flex flex-col max-h-[90%]"}>
@@ -82,11 +83,6 @@ const ChatInput = () => {
 
     const content = e.currentTarget.content.value as string;
     if (!content) {
-      return;
-    }
-
-    const username = getName();
-    if (!username) {
       return;
     }
 

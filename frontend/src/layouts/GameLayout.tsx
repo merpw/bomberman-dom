@@ -1,8 +1,7 @@
 import { FC, ReactNode, useEffect } from "react";
 import Chat from "#/components/Chat.tsx";
-import { Provider } from "react-redux";
-import store from "#/store/store.ts";
 import UserInfo from "#/components/UserInfo.tsx";
+import GlobalLayout from "#/layouts/Global.tsx";
 
 const GameLayout: FC<{ children: ReactNode }> = ({ children }) => {
   useEffect(() => {
@@ -16,15 +15,13 @@ const GameLayout: FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   return (
-    <div className={"container mx-auto flex h-full py-10"}>
-      <Provider store={store}>
-        <main className={"grow"}>{children}</main>
-        <aside className={"bg-base-100 rounded w-72"}>
-          <UserInfo />
-          <Chat />
-        </aside>
-      </Provider>
-    </div>
+    <GlobalLayout>
+      <main className={"grow"}>{children}</main>
+      <aside className={"bg-base-100 rounded w-72"}>
+        <UserInfo />
+        <Chat />
+      </aside>
+    </GlobalLayout>
   );
 };
 
