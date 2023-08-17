@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"backend/game"
 	"backend/ws"
 	"encoding/json"
 	"log"
@@ -18,13 +19,7 @@ func (h *Handlers) join(message ws.Message, client *ws.Client) {
 
 	name := joinItem.Username
 
-	isFull := true
-	for _, player := range h.Game.Players {
-		if player.Name == "" {
-			isFull = false
-			break
-		}
-	}
+	isFull := h.Game.GetPlayersCount() == game.MaxPlayerCount
 
 	if isFull {
 		log.Println("WARN: game is full")
@@ -48,9 +43,21 @@ func (h *Handlers) join(message ws.Message, client *ws.Client) {
 
 	h.Game.AddPlayer(name, client)
 
-	h.Hub.Broadcast(ws.NewMessage("users/join", struct {
-		Username string `json:"username"`
+	users := make([]string, 0, len(h.Game.Players))
+	for _, player := range h.Game.Players {
+		users = append(users, player.Name)
+	}
+
+	h.Hub.Broadcast(ws.NewMessage("users/update", struct {
+		Users []string `json:"users"`
 	}{
-		Username: name,
+		Users: users,
 	}))
+
+	h.Hub.Broadcast(ws.NewMessage("chat/message", chatMessageItem{
+		Username: "",
+		Content:  name + " has connected",
+	}))
+
+	h.countdownCheck()
 }

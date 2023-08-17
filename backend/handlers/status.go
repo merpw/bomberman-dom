@@ -1,22 +1,15 @@
 package handlers
 
 import (
+	"backend/game"
 	"encoding/json"
 	"log"
 	"net/http"
 )
 
-type GameState string
-
-const (
-	GameStateWaiting  GameState = "waiting"
-	GameStatePlaying  GameState = "playing"
-	GameStateFinished GameState = "finished"
-)
-
 type GameStatus struct {
-	Users     []string  `json:"users"`
-	GameState GameState `json:"gameState"`
+	Users     []string   `json:"users"`
+	GameState game.State `json:"gameState"`
 }
 
 // Status is an HTTP handler that returns the current GameStatus of the server
@@ -29,7 +22,7 @@ func (h *Handlers) Status(w http.ResponseWriter, r *http.Request) {
 
 	status := GameStatus{
 		Users:     users,
-		GameState: GameStateWaiting,
+		GameState: game.StateWaiting,
 	}
 
 	// send GameStatus:

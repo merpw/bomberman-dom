@@ -26,20 +26,40 @@ type Player struct {
 
 const MapSize = 10
 
-const PlayerCount = 4
+const MaxPlayerCount = 4
+const MinPlayerCount = 2
+
+type State string
+
+const (
+	StateAlone    State = "alone"
+	StateWaiting  State = "waiting"
+	StateStarting State = "starting"
+	StatePlaying  State = "playing"
+	StateFinished State = "finished"
+)
+
+const (
+	CountdownUsersJoin = 20 * 1000
+	CountdownGameStart = 10 * 1000
+)
 
 type Game struct {
-	Players [PlayerCount]Player
+	Players [MaxPlayerCount]Player
+	State   State
 	Map     [MapSize][MapSize]Cell
+
+	Countdown int
 
 	mux sync.Mutex
 }
 
 func NewGame() *Game {
 	return &Game{
-		Map:     [MapSize][MapSize]Cell{},
-		Players: [PlayerCount]Player{},
-		mux:     sync.Mutex{},
+		Map:       [MapSize][MapSize]Cell{},
+		Players:   [MaxPlayerCount]Player{},
+		Countdown: -1,
+		mux:       sync.Mutex{},
 	}
 }
 
@@ -68,6 +88,19 @@ func (g *Game) GetPlayer(client *ws.Client) *Player {
 		}
 	}
 	return nil
+}
+
+func (g *Game) GetPlayersCount() int {
+	g.mux.Lock()
+	defer g.mux.Unlock()
+
+	count := 0
+	for _, player := range g.Players {
+		if player.Name != "" {
+			count++
+		}
+	}
+	return count
 }
 
 func (g *Game) RemovePlayer(player *Player) {
