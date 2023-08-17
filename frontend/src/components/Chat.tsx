@@ -1,7 +1,9 @@
 import { useAppDispatch, useAppSelector } from "#/store/hooks.ts";
-import { FormEvent, useEffect } from "react";
+import { FC, FormEvent, useEffect } from "react";
 import wsActions from "#/store/ws/actions.ts";
 import { getName } from "#/helpers/getName.ts";
+import { ChatMessage } from "#/store/chats";
+import useHeroColor from "#/components/game/heroes.ts";
 
 const Chat = () => {
   const dispatch = useAppDispatch();
@@ -35,13 +37,37 @@ const ChatMessages = () => {
         .slice()
         .reverse()
         .map((message, key) => (
-          <div key={key}>
-            <span className={"text-info" /* TODO: add different colors */}>
-              {message.username}:{" "}
-            </span>{" "}
-            <span>{message.content}</span>
-          </div>
+          <Message message={message} key={key} />
         ))}
+    </div>
+  );
+};
+
+const Message: FC<{ message: ChatMessage }> = ({ message }) => {
+  const userColor = useHeroColor(message.username);
+  return (
+    <div className={"flex gap-1"}>
+      {message.username && (
+        <>
+          <span
+            className={"text-info"}
+            style={{
+              color: userColor,
+            }}
+          >
+            {message.username}:
+          </span>
+        </>
+      )}
+      <span
+        className={
+          "break-all" +
+          " " +
+          (message.username ? "" : "mx-auto text-base-content")
+        }
+      >
+        {message.content}
+      </span>
     </div>
   );
 };
