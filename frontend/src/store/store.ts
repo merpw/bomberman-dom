@@ -1,12 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import chatsReducer from "#/store/chats";
+import gameReducer from "#/store/game";
+import usersReducer from "#/store/users";
 import wsConnectionMiddleware from "#/store/ws/middleware";
 import wsConnectionReducer from "#/store/ws/connection";
 
 const store = configureStore({
   reducer: {
+    users: usersReducer,
     chats: chatsReducer,
+    game: gameReducer,
     wsConnection: wsConnectionReducer,
   },
   middleware: [wsConnectionMiddleware],
