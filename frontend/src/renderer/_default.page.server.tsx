@@ -5,6 +5,7 @@ import type { PageContextServer } from "./types";
 import "#/globals.css";
 import { PageContext } from "#/renderer/usePageContext.ts";
 import { Fragment, StrictMode } from "react";
+import { HelmetProvider } from "react-helmet-async";
 
 const defaultDocumentProps = {
   title: "",
@@ -21,11 +22,13 @@ export async function render(pageContext: PageContextServer) {
 
   const page = (
     <StrictMode>
-      <PageContext.Provider value={pageContext}>
-        <Layout>
-          <Page {...pageProps} />
-        </Layout>
-      </PageContext.Provider>
+      <HelmetProvider>
+        <PageContext.Provider value={pageContext}>
+          <Layout>
+            <Page {...pageProps} />
+          </Layout>
+        </PageContext.Provider>
+      </HelmetProvider>
     </StrictMode>
   );
 
