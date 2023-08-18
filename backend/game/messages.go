@@ -58,8 +58,9 @@ func (g *Game) GetMapMessage() ws.Message {
 }
 
 type PlayerMessage struct {
-	Name  string `json:"name"`
-	Lives int    `json:"lives"`
+	Name    string      `json:"name"`
+	Lives   int         `json:"lives"`
+	PowerUp PowerUpType `json:"powerUp,omitempty"`
 	Coords
 }
 
@@ -75,9 +76,10 @@ func (g *Game) GetPlayerMessage(player *Player) ws.Message {
 	}
 
 	return ws.NewMessage("game/updatePlayer", PlayerMessage{
-		Name:   player.Name,
-		Lives:  player.Lives,
-		Coords: coords,
+		Name:    player.Name,
+		Lives:   player.Lives,
+		PowerUp: player.PowerUp,
+		Coords:  coords,
 	})
 }
 

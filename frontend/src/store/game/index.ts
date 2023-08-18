@@ -19,12 +19,12 @@ export type Cell = {
   y: number;
 };
 
-export type SecretType = "bombCount" | "bombPower" | "speed" | "life";
+export type PowerUp = "bombCount" | "bombPower" | "speed" | "life";
 
 export type Secret = {
   x: number;
   y: number;
-  type: SecretType;
+  type: PowerUp;
 };
 
 export type Player = {
@@ -32,6 +32,7 @@ export type Player = {
   lives: number;
   x: number;
   y: number;
+  powerUp?: PowerUp;
 };
 
 export type Bomb = {
