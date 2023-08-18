@@ -87,4 +87,7 @@ func (h *Handlers) lobbyEndGame() {
 
 	h.Game = game.NewGame()
 	h.Hub.Broadcast(h.Game.GetUpdateStateMessage())
+	for _, client := range h.Hub.Clients {
+		client.SendError("Game is over", true)
+	}
 }

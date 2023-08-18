@@ -51,6 +51,7 @@ const wsConnectionMiddleware: Middleware = (store) => {
       ws.onclose = () => {
         console.log("ws disconnected");
         store.dispatch(wsConnectionActions.connectionClosed());
+        store.dispatch(wsConnectionActions.setConnectionError("disconnected"));
       };
 
       ws.onmessage = (event) => {

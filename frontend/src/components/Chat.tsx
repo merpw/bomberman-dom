@@ -1,20 +1,10 @@
 import { useAppDispatch, useAppSelector } from "#/store/hooks.ts";
-import { FC, FormEvent, useEffect } from "react";
+import { FC, FormEvent } from "react";
 import wsActions from "#/store/ws/actions.ts";
-import { useUsername } from "#/hooks/username.ts";
 import { ChatMessage } from "#/store/chats";
 import useHeroColor from "#/hooks/heroes.ts";
 
 const Chat = () => {
-  const dispatch = useAppDispatch();
-  const username = useUsername();
-
-  useEffect(() => {
-    if (!username) return;
-
-    dispatch(wsActions.connect({ username }));
-  }, [dispatch, username]);
-
   return (
     <div className={"mx-1 flex flex-col max-h-[90%]"}>
       <ChatMessages />

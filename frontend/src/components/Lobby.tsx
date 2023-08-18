@@ -1,6 +1,7 @@
 import { useAppSelector } from "#/store/hooks.ts";
 import { FC } from "react";
 import useHeroColor from "#/hooks/heroes.ts";
+import CountDown from "#/components/CountDown.tsx";
 
 const Lobby = () => {
   const users = useAppSelector((state) => state.users.users);
@@ -11,7 +12,7 @@ const Lobby = () => {
     <div className={"mx-auto"}>
       <h1>Lobby</h1>
       <p>Game state: {state}</p>
-      <CountDown />
+      <CountDown className={"font-mono text-6xl"} />
       {users.length && (
         <p>
           {users.length - emptySpots} of {users.length} players joined
@@ -40,18 +41,6 @@ const UserCard: FC<{ user: string }> = ({ user }) => {
     >
       {user}
     </div>
-  );
-};
-
-const CountDown = () => {
-  const countdown = useAppSelector((state) => state.game.countdown);
-
-  if (countdown === null) return null;
-
-  return (
-    <span className="countdown font-mono text-6xl">
-      <span style={{ "--value": countdown / 1000 } as never}></span>
-    </span>
   );
 };
 
