@@ -19,8 +19,19 @@ const sendChatMessage = (content: string) =>
     },
   });
 
+export type MoveDirection = "up" | "down" | "left" | "right";
+
+const sendPlayerMove = (direction: MoveDirection) =>
+  sendWSMessage({
+    type: "game/playerMove",
+    item: {
+      direction,
+    },
+  });
+
 const send = {
   chatMessage: sendChatMessage,
+  playerMove: sendPlayerMove,
 };
 
 const wsActions = {

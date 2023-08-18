@@ -64,8 +64,8 @@ const gameSlice = createSlice({
       reducer: (state, action: PayloadAction<{ map: CellType[][] }>) => {
         const gameMap = action.payload.map;
 
-        state.map = gameMap.map((row, y) => {
-          return row.map((cell, x) => {
+        state.map = gameMap.map((row, x) => {
+          return row.map((cell, y) => {
             return {
               type: cell,
               x,
