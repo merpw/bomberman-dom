@@ -15,6 +15,7 @@ func (h *Handlers) PrimaryHandler() ws.MessageHandler {
 		newEvent("chat/message", h.chatMessage),
 		newEvent("join", h.join),
 		newEvent("internal/disconnect", h.internalDisconnect),
+		newEvent("game/playerMove", h.gamePlayerMove),
 	}
 
 	return func(message ws.Message, client *ws.Client) {
