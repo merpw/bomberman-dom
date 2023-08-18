@@ -35,19 +35,32 @@ func (h *Handlers) gamePlayerPlaceBomb(_ ws.Message, client *ws.Client) {
 		return
 	}
 
-	bombNumber := h.Game.PlaceBomb(player)
-	if bombNumber == nil {
+	bomb := h.Game.PlaceBomb(player)
+	if bomb == nil {
 		// no bombs left
 		return
 	}
 	h.Hub.Broadcast(h.Game.GetBombsMessage(player))
 
 	time.Sleep(game.BombTime)
-	h.Game.ExplodeBomb(bombNumber)
+	h.Game.ExplodeBomb(bomb)
 	h.Hub.Broadcast(h.Game.GetBombsMessage(player))
 	h.Hub.Broadcast(h.Game.GetMapMessage())
 
+	for _, damagedCell := range bomb.DamagedCells {
+		for i := range h.Game.Players {
+			if h.Game.Players[i].Cell == damagedCell {
+				h.Game.Players[i].Lives--
+				h.Hub.Broadcast(h.Game.GetPlayerMessage(&h.Game.Players[i]))
+				if player.Lives == 0 {
+					// TODO: handle player death
+				}
+			}
+		}
+	}
+
 	time.Sleep(game.BombExplodeTime)
-	h.Game.RemoveBomb(bombNumber)
+
+	h.Game.RemoveBomb(bomb)
 	h.Hub.Broadcast(h.Game.GetBombsMessage(player))
 }

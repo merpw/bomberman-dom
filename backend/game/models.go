@@ -24,6 +24,8 @@ type Player struct {
 	Name   string
 	Client *ws.Client
 
+	Lives int
+
 	Cell *Cell
 
 	PrevMoveTime time.Time
@@ -74,6 +76,7 @@ func (g *Game) AddPlayer(name string, client *ws.Client) {
 			g.Players[i] = Player{
 				Name:   name,
 				Client: client,
+				Lives:  LifeCount,
 			}
 			break
 		}

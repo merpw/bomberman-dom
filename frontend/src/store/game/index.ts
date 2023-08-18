@@ -20,6 +20,7 @@ export type Cell = {
 
 export type Player = {
   name: string;
+  lives: number;
   x: number;
   y: number;
 };

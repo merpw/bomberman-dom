@@ -56,12 +56,5 @@ func (g *Game) ExplodeCell(bomb *Bomb, x, y int) bool {
 		return true
 	}
 
-	//for _, player := range g.GetActivePlayers() {
-	//	if player.Cell == cell {
-	//		// g.KillPlayer(player)
-	//		return true
-	//	}
-	//}
-
 	return false
 }
