@@ -2,8 +2,6 @@ package game
 
 import "math/rand"
 
-const WallDensity = 0.4
-
 func getRandomCellType() CellType {
 	if rand.Float32() < WallDensity {
 		return CellTypeWall

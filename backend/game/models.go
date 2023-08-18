@@ -26,11 +26,6 @@ type Player struct {
 	Cell *Cell
 }
 
-const MapSize = 10
-
-const MaxPlayerCount = 4
-const MinPlayerCount = 1
-
 type State string
 
 const (
@@ -39,11 +34,6 @@ const (
 	StateStarting State = "starting"
 	StatePlaying  State = "playing"
 	StateFinished State = "finished"
-)
-
-const (
-	CountdownUsersJoin = 0
-	CountdownGameStart = 0
 )
 
 type Game struct {
