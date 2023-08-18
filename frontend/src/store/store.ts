@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, Dispatch } from "@reduxjs/toolkit";
 
 import chatsReducer from "#/store/chats";
 import gameReducer from "#/store/game";
@@ -13,7 +13,7 @@ const store = configureStore({
     game: gameReducer,
     wsConnection: wsConnectionReducer,
   },
-  middleware: [wsConnectionMiddleware],
+  middleware: [wsConnectionMiddleware] as never, // RTK 2.0 beta problem, we need it to be able to build
 });
 
 export default store;
@@ -21,4 +21,4 @@ export default store;
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch;
+export type AppDispatch = Dispatch;
