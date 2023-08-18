@@ -1,13 +1,18 @@
 package game
 
+import "time"
+
 const MapSize = 10
 
-const MaxPlayerCount = 4
-const MinPlayerCount = 2
+const MaxPlayerCount = 1
+const MinPlayerCount = 1
 
 const (
-	CountdownUsersJoin = 20 * 1000
-	CountdownGameStart = 10 * 1000
+	CountdownUsersJoin = 0
+	CountdownGameStart = 0
 )
 
 const WallDensity = 0.4
+
+const MoveCooldown = 100 * time.Millisecond
+const MoveSpeed = 100 * time.Millisecond

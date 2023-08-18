@@ -3,6 +3,7 @@ package game
 import (
 	"backend/ws"
 	"sync"
+	"time"
 )
 
 type CellType int
@@ -24,6 +25,8 @@ type Player struct {
 	Client *ws.Client
 
 	Cell *Cell
+
+	PrevMoveTime time.Time
 }
 
 type State string

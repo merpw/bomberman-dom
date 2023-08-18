@@ -1,5 +1,9 @@
 package game
 
+import (
+	"time"
+)
+
 func (g *Game) SpawnPlayers() {
 	for i, player := range g.GetActivePlayers() {
 		switch i {
@@ -25,6 +29,10 @@ const (
 )
 
 func (g *Game) MovePlayer(player *Player, direction MoveDirection) {
+	if time.Now().Sub(player.PrevMoveTime) < MoveCooldown {
+		return
+	}
+
 	var targetCell *Cell
 	switch direction {
 	case MoveDirectionUp:
@@ -41,5 +49,9 @@ func (g *Game) MovePlayer(player *Player, direction MoveDirection) {
 		return
 	}
 
+	time.Sleep(MoveSpeed)
+
 	player.Cell = targetCell
+
+	player.PrevMoveTime = time.Now()
 }
