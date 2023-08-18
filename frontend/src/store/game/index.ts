@@ -9,12 +9,23 @@ export type GameState =
   | "finished"
   | null;
 
+/** 0 = empty, 1 = wall */
+export type CellType = 0 | 1;
+
+export type Cell = {
+  type: CellType;
+  x: number;
+  y: number;
+};
+
 const initialState: {
   state: GameState;
   countdown: number | null;
+  map?: Cell[][];
 } = {
   state: null,
   countdown: null,
+  map: undefined,
 };
 
 const gameSlice = createSlice({
@@ -41,15 +52,43 @@ const gameSlice = createSlice({
         payload: message.item,
       }),
     },
+    handleUpdateMap: {
+      reducer: (state, action: PayloadAction<{ map: CellType[][] }>) => {
+        const gameMap = action.payload.map;
+
+        state.map = gameMap.map((row, y) => {
+          return row.map((cell, x) => {
+            return {
+              type: cell,
+              x,
+              y,
+            };
+          });
+        });
+      },
+      prepare: (
+        message: WebSocketMessage<
+          "game/updateMap",
+          {
+            map: CellType[][];
+          }
+        >
+      ) => ({
+        payload: message.item,
+      }),
+    },
   },
 });
-
 export const gameActions = gameSlice.actions;
 
 export const gameHandlers: WSHandler[] = [
   {
     type: "game/updateState",
     handler: gameActions.handleUpdateState,
+  },
+  {
+    type: "game/updateMap",
+    handler: gameActions.handleUpdateMap,
   },
 ];
 
