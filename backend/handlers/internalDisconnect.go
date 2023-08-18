@@ -7,6 +7,8 @@ import (
 func (h *Handlers) internalDisconnect(_ ws.Message, client *ws.Client) {
 	player := h.Game.GetPlayer(client)
 
+	playerName := player.Name
+
 	if player == nil {
 		return
 	}
@@ -26,7 +28,7 @@ func (h *Handlers) internalDisconnect(_ ws.Message, client *ws.Client) {
 
 	h.Hub.Broadcast(ws.NewMessage("chat/message", chatMessageItem{
 		Username: "",
-		Content:  player.Name + " has disconnected",
+		Content:  playerName + " has disconnected",
 	}))
 
 	h.gameCheck()
