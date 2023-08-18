@@ -26,3 +26,19 @@ const BombExplodeTime = 1000 * time.Millisecond
 const BombPower = 2
 
 const LifeCount = 3
+
+type PowerUpType string
+
+const (
+	PowerUpTypeBombCount PowerUpType = "bombCount"
+	PowerUpTypeBombPower PowerUpType = "bombPower"
+	PowerUpTypeSpeed     PowerUpType = "speed"
+	PowerUpTypeLife      PowerUpType = "life"
+)
+
+var PowerUps = []PowerUpType{
+	PowerUpTypeBombCount,
+	PowerUpTypeBombPower,
+	PowerUpTypeSpeed,
+	PowerUpTypeLife,
+}

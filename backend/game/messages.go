@@ -23,19 +23,37 @@ func (g *Game) GetUpdateStateMessage() ws.Message {
 	})
 }
 
+type SecretData struct {
+	Coords
+	Type PowerUpType `json:"type"`
+}
+
 type MapMessage struct {
-	Map [MapSize][MapSize]CellType `json:"map"`
+	Map     [MapSize][MapSize]CellType `json:"map"`
+	Secrets []SecretData               `json:"secrets,omitempty"`
 }
 
 func (g *Game) GetMapMessage() ws.Message {
 	var gameMap [MapSize][MapSize]CellType
+	var secrets []SecretData
+
 	for x := 0; x < MapSize; x++ {
 		for y := 0; y < MapSize; y++ {
 			gameMap[x][y] = g.Map[x][y].Type
+			if g.Map[x][y].Type == CellTypeEmpty && g.Map[x][y].Secret != "" {
+				secrets = append(secrets, SecretData{
+					Coords: Coords{
+						X: x,
+						Y: y,
+					},
+					Type: g.Map[x][y].Secret,
+				})
+			}
 		}
 	}
 	return ws.NewMessage("game/updateMap", MapMessage{
-		Map: gameMap,
+		Map:     gameMap,
+		Secrets: secrets,
 	})
 }
 
@@ -66,11 +84,11 @@ func (g *Game) GetPlayerMessage(player *Player) ws.Message {
 type bombCellData struct {
 	X            int      `json:"x"`
 	Y            int      `json:"y"`
-	DamagedCells []Coords `json:"damagedCells"`
+	DamagedCells []Coords `json:"damagedCells,omitempty"`
 }
 
 type BombsMessage struct {
-	Bombs []bombCellData `json:"bombs"`
+	Bombs []bombCellData `json:"bombs,omitempty"`
 }
 
 func (g *Game) GetBombsMessage(player *Player) ws.Message {

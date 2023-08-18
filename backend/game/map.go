@@ -1,6 +1,9 @@
 package game
 
-import "math/rand"
+import (
+	"math/rand"
+	"sort"
+)
 
 func getRandomCellType() CellType {
 	if rand.Float32() < WallDensity {
@@ -50,5 +53,22 @@ func (g *Game) InitMap() {
 		g.Map[1][MapSize-2].Type = CellTypeEmpty
 		g.Map[1][MapSize-3].Type = CellTypeEmpty
 		g.Map[2][MapSize-2].Type = CellTypeEmpty
+	}
+
+	var breakableWalls []*Cell
+	for i := range g.Map {
+		for j := range g.Map[i] {
+			if g.Map[i][j].Type == CellTypeWall {
+				breakableWalls = append(breakableWalls, &g.Map[i][j])
+			}
+		}
+	}
+
+	sort.Slice(breakableWalls, func(i, j int) bool {
+		return rand.Float32() < 0.5
+	})
+
+	for i := 0; i < len(breakableWalls) && i < len(PowerUps); i++ {
+		breakableWalls[i].Secret = PowerUps[i]
 	}
 }

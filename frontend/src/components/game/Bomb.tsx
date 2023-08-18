@@ -5,10 +5,10 @@ const Bomb: FC<{ bomb: Bomb }> = ({ bomb }) => {
   console.log("bomb", bomb);
   return (
     <>
-      {bomb.damagedCells === null ? (
-        <rect x={bomb.x} y={bomb.y} width={1} height={1} fill="red" />
-      ) : (
+      {bomb.damagedCells ? (
         <DamagedCells damagedCells={bomb.damagedCells} />
+      ) : (
+        <rect x={bomb.x} y={bomb.y} width={1} height={1} fill="red" />
       )}
     </>
   );
@@ -27,6 +27,7 @@ const DamagedCells: FC<{ damagedCells: { x: number; y: number }[] }> = ({
           width={1}
           height={1}
           fill="pink"
+          opacity={0.7}
         />
       ))}
     </>

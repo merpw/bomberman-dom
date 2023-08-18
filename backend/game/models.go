@@ -19,6 +19,8 @@ type Cell struct {
 	Y int
 
 	Type CellType
+
+	Secret PowerUpType
 }
 
 type Player struct {

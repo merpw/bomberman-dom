@@ -5,6 +5,7 @@ import Player from "#/components/game/Player.tsx";
 import Controls from "#/components/game/Controls.tsx";
 import Bomb from "#/components/game/Bomb.tsx";
 import Lives from "#/components/game/Lives.tsx";
+import Secret from "#/components/game/Secret.tsx";
 
 const Game: FC = () => {
   const mapWidth = useAppSelector((state) => state.game.map?.length);
@@ -43,6 +44,7 @@ const Field: FC = () => {
   return (
     <g>
       <Map />
+      <Secrets />
       <Players />
       <Bombs />
     </g>
@@ -84,6 +86,18 @@ const Bombs = () => {
     <g>
       {bombs?.map((bomb, key) => (
         <Bomb bomb={bomb} key={key} />
+      ))}
+    </g>
+  );
+};
+
+const Secrets = () => {
+  const secrets = useAppSelector((state) => state.game.secrets);
+
+  return (
+    <g>
+      {secrets?.map((secret, key) => (
+        <Secret secret={secret} key={key} />
       ))}
     </g>
   );

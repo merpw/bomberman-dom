@@ -19,6 +19,14 @@ export type Cell = {
   y: number;
 };
 
+export type SecretType = "bombCount" | "bombPower" | "speed" | "life";
+
+export type Secret = {
+  x: number;
+  y: number;
+  type: SecretType;
+};
+
 export type Player = {
   name: string;
   lives: number;
@@ -29,19 +37,21 @@ export type Player = {
 export type Bomb = {
   x: number;
   y: number;
-  damagedCells: { x: number; y: number }[] | null;
+  damagedCells: { x: number; y: number }[] | undefined;
 };
 
 const initialState: {
   state: GameState;
   countdown: number | null;
   map?: Cell[][];
+  secrets?: Secret[];
   players?: Player[];
   bombs?: Bomb[];
 } = {
   state: undefined,
   countdown: null,
   map: undefined,
+  secrets: undefined,
   players: undefined,
   bombs: undefined,
 };
@@ -71,7 +81,10 @@ const gameSlice = createSlice({
       }),
     },
     handleUpdateMap: {
-      reducer: (state, action: PayloadAction<{ map: CellType[][] }>) => {
+      reducer: (
+        state,
+        action: PayloadAction<{ map: CellType[][]; secrets: Secret[] }>
+      ) => {
         const gameMap = action.payload.map;
 
         state.map = gameMap.map((row, x) => {
@@ -83,12 +96,15 @@ const gameSlice = createSlice({
             };
           });
         });
+
+        state.secrets = action.payload.secrets;
       },
       prepare: (
         message: WebSocketMessage<
           "game/updateMap",
           {
             map: CellType[][];
+            secrets: Secret[];
           }
         >
       ) => ({
