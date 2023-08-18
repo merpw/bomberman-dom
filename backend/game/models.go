@@ -27,6 +27,12 @@ type Player struct {
 	Cell *Cell
 
 	PrevMoveTime time.Time
+
+	Bombs [MaxBombCount]Bomb
+}
+
+type Bomb struct {
+	Cell *Cell
 }
 
 type State string
@@ -85,18 +91,6 @@ func (g *Game) GetPlayer(client *ws.Client) *Player {
 	return nil
 }
 
-func (g *Game) GetPlayerNumber(player *Player) int {
-	g.mux.Lock()
-	defer g.mux.Unlock()
-
-	for i, p := range g.Players {
-		if p == *player {
-			return i
-		}
-	}
-	return -1
-}
-
 func (g *Game) GetActivePlayers() []*Player {
 	g.mux.Lock()
 	defer g.mux.Unlock()
@@ -123,12 +117,12 @@ func (g *Game) GetPlayersCount() int {
 	return count
 }
 
-func (g *Game) RemovePlayer(player *Player) {
+func (g *Game) RemovePlayer(playerName string) {
 	g.mux.Lock()
 	defer g.mux.Unlock()
 
 	for i, p := range g.Players {
-		if p == *player {
+		if p.Name == playerName {
 			g.Players[i] = Player{}
 			break
 		}

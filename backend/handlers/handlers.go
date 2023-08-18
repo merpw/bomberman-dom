@@ -16,6 +16,7 @@ func (h *Handlers) PrimaryHandler() ws.MessageHandler {
 		newEvent("join", h.join),
 		newEvent("internal/disconnect", h.internalDisconnect),
 		newEvent("game/playerMove", h.gamePlayerMove),
+		newEvent("game/playerPlaceBomb", h.gamePlayerPlaceBomb),
 	}
 
 	return func(message ws.Message, client *ws.Client) {
@@ -27,7 +28,7 @@ func (h *Handlers) PrimaryHandler() ws.MessageHandler {
 
 		for _, event := range events {
 			if event.Type == message.Type {
-				event.Handler(message, client)
+				go event.Handler(message, client)
 				return
 			}
 		}

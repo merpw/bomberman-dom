@@ -13,7 +13,7 @@ func (h *Handlers) internalDisconnect(_ ws.Message, client *ws.Client) {
 		return
 	}
 
-	h.Game.RemovePlayer(player)
+	h.Game.RemovePlayer(playerName)
 
 	users := make([]string, 0, len(h.Game.Players))
 	for _, player := range h.Game.Players {
