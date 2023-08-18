@@ -60,5 +60,5 @@ func (h *Handlers) join(message ws.Message, client *ws.Client) {
 		Content:  name + " has connected",
 	}))
 
-	h.countdownCheck()
+	h.gameCheck()
 }

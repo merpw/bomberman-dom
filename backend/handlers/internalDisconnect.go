@@ -29,5 +29,5 @@ func (h *Handlers) internalDisconnect(_ ws.Message, client *ws.Client) {
 		Content:  player.Name + " has disconnected",
 	}))
 
-	h.countdownCheck()
+	h.gameCheck()
 }

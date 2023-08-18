@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func (h *Handlers) countdownCheck() {
+func (h *Handlers) lobbyCheck() {
 	if h.Game.State == game.StatePlaying {
 		return
 	}
@@ -18,17 +18,17 @@ func (h *Handlers) countdownCheck() {
 	}
 
 	if h.Game.GetPlayersCount() == game.MaxPlayerCount {
-		go h.countdownGameStart()
+		go h.lobbyStartGame()
 		return
 	}
 
 	if h.Game.GetPlayersCount() >= game.MinPlayerCount {
-		go h.countdownJoin()
+		go h.lobbyJoin()
 		return
 	}
 }
 
-func (h *Handlers) countdownJoin() {
+func (h *Handlers) lobbyJoin() {
 	h.Game.Countdown = game.CountdownUsersJoin
 	h.Game.State = game.StateWaiting
 
@@ -45,10 +45,10 @@ func (h *Handlers) countdownJoin() {
 		time.Sleep(1 * time.Second)
 	}
 
-	go h.countdownGameStart()
+	go h.lobbyStartGame()
 }
 
-func (h *Handlers) countdownGameStart() {
+func (h *Handlers) lobbyStartGame() {
 	h.Game.Countdown = game.CountdownGameStart
 	h.Game.State = game.StateStarting
 
