@@ -18,14 +18,22 @@ export type Cell = {
   y: number;
 };
 
+export type Player = {
+  name: string;
+  x: number;
+  y: number;
+};
+
 const initialState: {
   state: GameState;
   countdown: number | null;
   map?: Cell[][];
+  players?: Player[];
 } = {
   state: null,
   countdown: null,
   map: undefined,
+  players: undefined,
 };
 
 const gameSlice = createSlice({
@@ -77,6 +85,29 @@ const gameSlice = createSlice({
         payload: message.item,
       }),
     },
+
+    handleUpdatePlayer: {
+      reducer: (state, action: PayloadAction<Player>) => {
+        const player = action.payload;
+
+        if (!state.players) {
+          state.players = [];
+        }
+        const playerPos = state.players.findIndex(
+          (p) => p.name === player.name
+        );
+
+        if (playerPos !== -1) {
+          state.players[playerPos] = player;
+          return;
+        }
+
+        state.players.push(player);
+      },
+      prepare: (message: WebSocketMessage<"game/updatePlayer", Player>) => ({
+        payload: message.item,
+      }),
+    },
   },
 });
 export const gameActions = gameSlice.actions;
@@ -89,6 +120,10 @@ export const gameHandlers: WSHandler[] = [
   {
     type: "game/updateMap",
     handler: gameActions.handleUpdateMap,
+  },
+  {
+    type: "game/updatePlayer",
+    handler: gameActions.handleUpdatePlayer,
   },
 ];
 

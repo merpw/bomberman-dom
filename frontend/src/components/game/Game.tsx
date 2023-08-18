@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { useAppSelector } from "#/store/hooks.ts";
 import Cell from "#/components/game/Cell.tsx";
+import Player from "#/components/game/Player.tsx";
 
 const Game: FC = () => {
   return (
@@ -15,16 +16,19 @@ const Game: FC = () => {
 const Field: FC = () => {
   const map = useAppSelector((state) => state.game.map);
 
-  if (!map) return null;
+  const players = useAppSelector((state) => state.game.players);
 
   return (
     <g>
-      {map.map((row, y) => (
+      {map?.map((row, y) => (
         <g key={y}>
           {row.map((cell, key) => (
             <Cell key={key} cell={cell} />
           ))}
         </g>
+      ))}
+      {players?.map((player) => (
+        <Player key={player.name} player={player} />
       ))}
     </g>
   );
