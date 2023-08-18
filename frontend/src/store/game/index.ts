@@ -10,8 +10,8 @@ export type GameState =
   | "finished"
   | undefined;
 
-/** 0 = empty, 1 = wall */
-export type CellType = 0 | 1;
+/** 0 = empty, 1 = wall, 2 = unbreakable wall */
+export type CellType = 0 | 1 | 2;
 
 export type Cell = {
   type: CellType;

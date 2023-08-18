@@ -49,6 +49,11 @@ func (g *Game) ExplodeCell(bomb *Bomb, x, y int) bool {
 	}
 
 	cell := &g.Map[x][y]
+
+	if cell.Type == CellTypeUnbreakableWall {
+		return true
+	}
+
 	bomb.DamagedCells = append(bomb.DamagedCells, cell)
 
 	if cell.Type == CellTypeWall {

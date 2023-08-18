@@ -9,8 +9,9 @@ import (
 type CellType int
 
 const (
-	CellTypeEmpty CellType = 0
-	CellTypeWall  CellType = 1
+	CellTypeEmpty           CellType = 0
+	CellTypeWall            CellType = 1
+	CellTypeUnbreakableWall CellType = 2
 )
 
 type Cell struct {

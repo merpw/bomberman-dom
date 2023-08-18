@@ -45,7 +45,7 @@ func (g *Game) MovePlayer(player *Player, direction MoveDirection) {
 		targetCell = &g.Map[player.Cell.X+1][player.Cell.Y]
 	}
 
-	if targetCell.Type == CellTypeWall {
+	if targetCell.Type != CellTypeEmpty {
 		return
 	}
 

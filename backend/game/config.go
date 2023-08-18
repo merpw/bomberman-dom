@@ -2,15 +2,16 @@ package game
 
 import "time"
 
-const MapSize = 10
+// MapSize is the size of the map, odd numbers looks better
+const MapSize = 11
 
 const MaxPlayerCount = 4
 const MinPlayerCount = 2
 
 const (
-	CountdownUsersJoin = 20 * 1000
-	CountdownGameStart = 10 * 1000
-	CountdownGameEnd   = 10 * 1000
+	CountdownUsersJoin = 0
+	CountdownGameStart = 0
+	CountdownGameEnd   = 0
 )
 
 const WallDensity = 0.4

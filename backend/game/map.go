@@ -13,9 +13,9 @@ func (g *Game) InitMap() {
 	for x := 0; x < MapSize; x++ {
 		for y := 0; y < MapSize; y++ {
 			var cellType CellType
-			if x == 0 || y == 0 || x == MapSize-1 || y == MapSize-1 {
+			if x == 0 || y == 0 || x == MapSize-1 || y == MapSize-1 || (x%2 == 0 && y%2 == 0) {
 				// walls around the map
-				cellType = CellTypeWall
+				cellType = CellTypeUnbreakableWall
 			} else {
 				cellType = getRandomCellType()
 			}
