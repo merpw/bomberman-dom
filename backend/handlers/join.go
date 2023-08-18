@@ -18,6 +18,12 @@ func (h *Handlers) join(message ws.Message, client *ws.Client) {
 		return
 	}
 
+	if h.Game.State == game.StatePlaying || h.Game.State == game.StateStarting {
+		log.Println("WARN: game is already started")
+		client.SendError("Game is already started", true)
+		return
+	}
+
 	name := joinItem.Username
 
 	isFull := h.Game.GetPlayersCount() == game.MaxPlayerCount

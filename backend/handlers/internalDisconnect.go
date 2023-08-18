@@ -6,12 +6,11 @@ import (
 
 func (h *Handlers) internalDisconnect(_ ws.Message, client *ws.Client) {
 	player := h.Game.GetPlayer(client)
-
-	playerName := player.Name
-
 	if player == nil {
 		return
 	}
+
+	playerName := player.Name
 
 	h.Game.RemovePlayer(playerName)
 

@@ -22,7 +22,7 @@ func (h *Handlers) Status(w http.ResponseWriter, r *http.Request) {
 
 	status := GameStatus{
 		Users:     users,
-		GameState: game.StateWaiting,
+		GameState: h.Game.State,
 	}
 
 	// send GameStatus:
