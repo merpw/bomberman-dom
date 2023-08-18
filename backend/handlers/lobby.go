@@ -37,7 +37,7 @@ func (h *Handlers) lobbyJoin() {
 			return
 		}
 		h.Hub.Broadcast(h.Game.GetUpdateStateMessage())
-		h.Game.Countdown = h.Game.Countdown - 1000
+		h.Game.Countdown = h.Game.Countdown - time.Second
 		if h.Game.Countdown < 0 {
 			h.Game.Countdown = 0
 			break
@@ -57,7 +57,7 @@ func (h *Handlers) lobbyStartGame() {
 			return
 		}
 		h.Hub.Broadcast(h.Game.GetUpdateStateMessage())
-		h.Game.Countdown = h.Game.Countdown - 1000
+		h.Game.Countdown = h.Game.Countdown - time.Second
 		if h.Game.Countdown < 0 {
 			h.Game.Countdown = 0
 			break
@@ -77,7 +77,7 @@ func (h *Handlers) lobbyEndGame() {
 			return
 		}
 		h.Hub.Broadcast(h.Game.GetUpdateStateMessage())
-		h.Game.Countdown = h.Game.Countdown - 1000
+		h.Game.Countdown = h.Game.Countdown - time.Second
 		if h.Game.Countdown < 0 {
 			h.Game.Countdown = 0
 			break

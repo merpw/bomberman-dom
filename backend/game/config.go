@@ -9,9 +9,9 @@ const MaxPlayerCount = 4
 const MinPlayerCount = 2
 
 const (
-	CountdownUsersJoin = 0
-	CountdownGameStart = 0
-	CountdownGameEnd   = 0
+	CountdownUsersJoin = 20 * time.Second
+	CountdownGameStart = 10 * time.Second
+	CountdownGameEnd   = 10 * time.Second
 )
 
 const WallDensity = 0.4

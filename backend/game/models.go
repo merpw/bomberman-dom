@@ -59,7 +59,7 @@ type Game struct {
 	State   State
 	Map     [MapSize][MapSize]Cell
 
-	Countdown int
+	Countdown time.Duration
 
 	mux sync.Mutex
 }

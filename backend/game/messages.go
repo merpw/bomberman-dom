@@ -8,14 +8,15 @@ type Coords struct {
 }
 
 type StateMessage struct {
-	State     State `json:"state"`
-	Countdown *int  `json:"countdown"`
+	State     State  `json:"state"`
+	Countdown *int64 `json:"countdown"`
 }
 
 func (g *Game) GetUpdateStateMessage() ws.Message {
-	var countdown *int
+	var countdown *int64
 	if g.Countdown > 0 {
-		countdown = &g.Countdown
+		milliseconds := g.Countdown.Milliseconds()
+		countdown = &milliseconds
 	}
 	return ws.NewMessage("game/updateState", StateMessage{
 		State:     g.State,
