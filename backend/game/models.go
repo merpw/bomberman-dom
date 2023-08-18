@@ -22,6 +22,8 @@ type Cell struct {
 type Player struct {
 	Name   string
 	Client *ws.Client
+
+	Cell *Cell
 }
 
 const MapSize = 10
@@ -40,8 +42,8 @@ const (
 )
 
 const (
-	CountdownUsersJoin = 20 * 1000
-	CountdownGameStart = 10 * 1000
+	CountdownUsersJoin = 0
+	CountdownGameStart = 0
 )
 
 type Game struct {
@@ -88,6 +90,31 @@ func (g *Game) GetPlayer(client *ws.Client) *Player {
 		}
 	}
 	return nil
+}
+
+func (g *Game) GetPlayerNumber(player *Player) int {
+	g.mux.Lock()
+	defer g.mux.Unlock()
+
+	for i, p := range g.Players {
+		if p == *player {
+			return i
+		}
+	}
+	return -1
+}
+
+func (g *Game) GetActivePlayers() []*Player {
+	g.mux.Lock()
+	defer g.mux.Unlock()
+
+	var activePlayers []*Player
+	for i := range g.Players {
+		if g.Players[i].Name != "" {
+			activePlayers = append(activePlayers, &g.Players[i])
+		}
+	}
+	return activePlayers
 }
 
 func (g *Game) GetPlayersCount() int {

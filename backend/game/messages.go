@@ -33,3 +33,17 @@ func (g *Game) GetMapMessage() ws.Message {
 		Map: gameMap,
 	})
 }
+
+type PlayerMessage struct {
+	Name string `json:"name"`
+	X    int    `json:"x"`
+	Y    int    `json:"y"`
+}
+
+func (g *Game) GetPlayerMessage(player *Player) ws.Message {
+	return ws.NewMessage("game/updatePlayer", PlayerMessage{
+		Name: player.Name,
+		X:    player.Cell.X,
+		Y:    player.Cell.Y,
+	})
+}

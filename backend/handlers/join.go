@@ -15,6 +15,7 @@ func (h *Handlers) join(message ws.Message, client *ws.Client) {
 	err := json.Unmarshal(message.Item, &joinItem)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 
 	name := joinItem.Username
