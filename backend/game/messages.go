@@ -2,6 +2,11 @@ package game
 
 import "backend/ws"
 
+type Coords struct {
+	X int `json:"x"`
+	Y int `json:"y"`
+}
+
 type StateMessage struct {
 	State     State `json:"state"`
 	Countdown *int  `json:"countdown"`
@@ -36,21 +41,23 @@ func (g *Game) GetMapMessage() ws.Message {
 
 type PlayerMessage struct {
 	Name string `json:"name"`
-	X    int    `json:"x"`
-	Y    int    `json:"y"`
+	Coords
 }
 
 func (g *Game) GetPlayerMessage(player *Player) ws.Message {
 	return ws.NewMessage("game/updatePlayer", PlayerMessage{
 		Name: player.Name,
-		X:    player.Cell.X,
-		Y:    player.Cell.Y,
+		Coords: Coords{
+			X: player.Cell.X,
+			Y: player.Cell.Y,
+		},
 	})
 }
 
 type bombCellData struct {
-	X int `json:"x"`
-	Y int `json:"y"`
+	X            int      `json:"x"`
+	Y            int      `json:"y"`
+	DamagedCells []Coords `json:"damagedCells"`
 }
 
 type BombsMessage struct {
@@ -61,9 +68,17 @@ func (g *Game) GetBombsMessage(player *Player) ws.Message {
 	var bombs []bombCellData
 	for _, bomb := range player.Bombs {
 		if bomb.Cell != nil {
+			var damagedCells []Coords
+			for _, cell := range bomb.DamagedCells {
+				damagedCells = append(damagedCells, Coords{
+					X: cell.X,
+					Y: cell.Y,
+				})
+			}
 			bombs = append(bombs, bombCellData{
-				X: bomb.Cell.X,
-				Y: bomb.Cell.Y,
+				X:            bomb.Cell.X,
+				Y:            bomb.Cell.Y,
+				DamagedCells: damagedCells,
 			})
 		}
 	}

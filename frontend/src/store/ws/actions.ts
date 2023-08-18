@@ -29,9 +29,16 @@ const sendPlayerMove = (direction: MoveDirection) =>
     },
   });
 
+export const sendPlayerPlaceBomb = () =>
+  sendWSMessage({
+    type: "game/playerPlaceBomb",
+    item: undefined,
+  });
+
 const send = {
   chatMessage: sendChatMessage,
   playerMove: sendPlayerMove,
+  playerPlaceBomb: sendPlayerPlaceBomb,
 };
 
 const wsActions = {

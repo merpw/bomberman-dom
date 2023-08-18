@@ -46,4 +46,8 @@ func (h *Handlers) gamePlayerPlaceBomb(_ ws.Message, client *ws.Client) {
 	h.Game.ExplodeBomb(bombNumber)
 	h.Hub.Broadcast(h.Game.GetBombsMessage(player))
 	h.Hub.Broadcast(h.Game.GetMapMessage())
+
+	time.Sleep(game.BombExplodeTime)
+	h.Game.RemoveBomb(bombNumber)
+	h.Hub.Broadcast(h.Game.GetBombsMessage(player))
 }

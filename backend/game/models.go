@@ -32,7 +32,8 @@ type Player struct {
 }
 
 type Bomb struct {
-	Cell *Cell
+	Cell         *Cell
+	DamagedCells []*Cell
 }
 
 type State string

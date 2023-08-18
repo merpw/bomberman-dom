@@ -24,16 +24,24 @@ export type Player = {
   y: number;
 };
 
+export type Bomb = {
+  x: number;
+  y: number;
+  damagedCells: { x: number; y: number }[] | null;
+};
+
 const initialState: {
   state: GameState;
   countdown: number | null;
   map?: Cell[][];
   players?: Player[];
+  bombs?: Bomb[];
 } = {
   state: null,
   countdown: null,
   map: undefined,
   players: undefined,
+  bombs: undefined,
 };
 
 const gameSlice = createSlice({
@@ -108,6 +116,17 @@ const gameSlice = createSlice({
         payload: message.item,
       }),
     },
+
+    handleUpdateBombs: {
+      reducer: (state, action: PayloadAction<Bomb[]>) => {
+        state.bombs = action.payload;
+      },
+      prepare: (
+        message: WebSocketMessage<"game/updateBombs", { bombs: Bomb[] }>
+      ) => ({
+        payload: message.item.bombs,
+      }),
+    },
   },
 });
 export const gameActions = gameSlice.actions;
@@ -124,6 +143,10 @@ export const gameHandlers: WSHandler[] = [
   {
     type: "game/updatePlayer",
     handler: gameActions.handleUpdatePlayer,
+  },
+  {
+    type: "game/updateBombs",
+    handler: gameActions.handleUpdateBombs,
   },
 ];
 

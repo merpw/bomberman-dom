@@ -20,4 +20,5 @@ const MoveSpeed = 100 * time.Millisecond
 const MaxBombCount = 3
 
 const BombTime = 3000 * time.Millisecond
+const BombExplodeTime = 1000 * time.Millisecond
 const BombPower = 2

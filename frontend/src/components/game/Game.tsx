@@ -3,6 +3,7 @@ import { useAppSelector } from "#/store/hooks.ts";
 import Cell from "#/components/game/Cell.tsx";
 import Player from "#/components/game/Player.tsx";
 import Controls from "#/components/game/Controls.tsx";
+import Bomb from "#/components/game/Bomb.tsx";
 
 const Game: FC = () => {
   return (
@@ -16,9 +17,17 @@ const Game: FC = () => {
 };
 
 const Field: FC = () => {
-  const map = useAppSelector((state) => state.game.map);
+  return (
+    <g>
+      <Map />
+      <Players />
+      <Bombs />
+    </g>
+  );
+};
 
-  const players = useAppSelector((state) => state.game.players);
+const Map = () => {
+  const map = useAppSelector((state) => state.game.map);
 
   return (
     <g>
@@ -29,8 +38,29 @@ const Field: FC = () => {
           ))}
         </g>
       ))}
+    </g>
+  );
+};
+
+const Players = () => {
+  const players = useAppSelector((state) => state.game.players);
+
+  return (
+    <g>
       {players?.map((player) => (
         <Player key={player.name} player={player} />
+      ))}
+    </g>
+  );
+};
+
+const Bombs = () => {
+  const bombs = useAppSelector((state) => state.game.bombs);
+
+  return (
+    <g>
+      {bombs?.map((bomb, key) => (
+        <Bomb bomb={bomb} key={key} />
       ))}
     </g>
   );

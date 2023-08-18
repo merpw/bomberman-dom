@@ -4,7 +4,7 @@ import wsActions, { MoveDirection } from "#/store/ws/actions.ts";
 
 // TODO: maybe use debounce to reduce amount of messages
 
-const Keys: Record<string, MoveDirection> = {
+const MoveKeys: Record<string, MoveDirection> = {
   ArrowUp: "up",
   w: "up",
   W: "up",
@@ -19,6 +19,10 @@ const Keys: Record<string, MoveDirection> = {
   D: "right",
 };
 
+const ActionKeys: Record<string, string> = {
+  " ": "placeBomb",
+} as const;
+
 const Controls: FC = () => {
   const dispatch = useAppDispatch();
 
@@ -27,9 +31,17 @@ const Controls: FC = () => {
       if ((event.target as HTMLElement).tagName === "INPUT") {
         return;
       }
-      const newDirection = Keys[event.key];
+
+      const newDirection = MoveKeys[event.key];
       if (newDirection) {
         dispatch(wsActions.send.playerMove(newDirection));
+        return;
+      }
+
+      const newAction = ActionKeys[event.key];
+      if (newAction === "placeBomb") {
+        dispatch(wsActions.send.playerPlaceBomb());
+        return;
       }
     };
 
