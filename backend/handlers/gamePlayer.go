@@ -52,6 +52,15 @@ func (h *Handlers) gamePlayerPlaceBomb(_ ws.Message, client *ws.Client) {
 		return
 	}
 
+	for _, p := range h.Game.Players {
+		for _, bomb := range p.Bombs {
+			if bomb.Cell == player.Cell {
+				// A Bomb is already placed on this cell
+				return
+			}
+		}
+	}
+
 	bomb := h.Game.PlaceBomb(player)
 	if bomb == nil {
 		// no bombs left
