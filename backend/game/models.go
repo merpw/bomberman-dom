@@ -33,7 +33,9 @@ type Player struct {
 
 	PrevMoveTime time.Time
 
-	Bombs [MaxBombCount]Bomb
+	Bombs [MaxBombCount + 1]Bomb // +1 if the player has a PowerUpTypeBombCount
+
+	PowerUp PowerUpType
 }
 
 type Bomb struct {

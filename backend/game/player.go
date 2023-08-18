@@ -28,9 +28,9 @@ const (
 	MoveDirectionRight MoveDirection = "right"
 )
 
-func (g *Game) MovePlayer(player *Player, direction MoveDirection) {
+func (g *Game) MovePlayer(player *Player, direction MoveDirection) (tookSecret bool) {
 	if time.Now().Sub(player.PrevMoveTime) < MoveCooldown {
-		return
+		return false
 	}
 
 	var targetCell *Cell
@@ -46,12 +46,36 @@ func (g *Game) MovePlayer(player *Player, direction MoveDirection) {
 	}
 
 	if targetCell.Type != CellTypeEmpty {
-		return
+		return false
 	}
 
-	time.Sleep(MoveSpeed)
+	defer func() {
+		player.PrevMoveTime = time.Now()
+	}()
+
+	if player.PowerUp == PowerUpTypeSpeed {
+		time.Sleep(MoveSpeed / 2)
+	} else {
+		time.Sleep(MoveSpeed)
+	}
 
 	player.Cell = targetCell
 
-	player.PrevMoveTime = time.Now()
+	if targetCell.Secret != "" {
+		switch targetCell.Secret {
+		case PowerUpTypeLife:
+			player.Lives++
+		case PowerUpTypeBombCount:
+			player.PowerUp = PowerUpTypeBombCount
+		case PowerUpTypeBombPower:
+			player.PowerUp = PowerUpTypeBombPower
+		case PowerUpTypeSpeed:
+			player.PowerUp = PowerUpTypeSpeed
+		}
+
+		targetCell.Secret = ""
+		return true
+	}
+
+	return false
 }

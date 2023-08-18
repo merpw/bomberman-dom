@@ -31,8 +31,12 @@ func (h *Handlers) gamePlayerMove(message ws.Message, client *ws.Client) {
 		return
 	}
 
-	h.Game.MovePlayer(player, moveItem.Direction)
+	tookSecret := h.Game.MovePlayer(player, moveItem.Direction)
 	h.Hub.Broadcast(h.Game.GetPlayerMessage(player))
+
+	if tookSecret {
+		h.Hub.Broadcast(h.Game.GetMapMessage())
+	}
 }
 
 func (h *Handlers) gamePlayerPlaceBomb(_ ws.Message, client *ws.Client) {
@@ -56,7 +60,7 @@ func (h *Handlers) gamePlayerPlaceBomb(_ ws.Message, client *ws.Client) {
 	h.Hub.Broadcast(h.Game.GetBombsMessage(player))
 
 	time.Sleep(game.BombTime)
-	h.Game.ExplodeBomb(bomb)
+	h.Game.ExplodeBomb(player, bomb)
 	h.Hub.Broadcast(h.Game.GetBombsMessage(player))
 	h.Hub.Broadcast(h.Game.GetMapMessage())
 
