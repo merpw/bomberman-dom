@@ -7,6 +7,7 @@ import { useUsername } from "#/helpers/name.ts";
 import Lobby from "#/components/Lobby.tsx";
 import { useAppSelector } from "#/store/hooks.ts";
 import Game from "#/components/game/Game.tsx";
+import Finish from "#/components/Finish.tsx";
 
 export const Layout = GameLayout;
 
@@ -18,12 +19,16 @@ export const Page = () => {
     if (!name) {
       navigate("/");
     }
-  }, [name]);
+  }, [gameState, name]);
 
   if (!gameState) return null;
 
   if (gameState === "playing") {
     return <Game />;
+  }
+
+  if (gameState === "finished") {
+    return <Finish />;
   }
 
   return <Lobby />;

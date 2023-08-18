@@ -7,9 +7,23 @@ func (h *Handlers) gameCheck() {
 		h.lobbyCheck()
 	}
 
-	if len(h.Game.GetActivePlayers()) == 0 {
+	var alivePlayersCount int
+	for _, player := range h.Game.GetActivePlayers() {
+		if player.Lives > 0 {
+			alivePlayersCount++
+		}
+	}
+
+	if alivePlayersCount == 0 {
 		h.Game = game.NewGame()
 		h.Hub.Broadcast(h.Game.GetUpdateStateMessage())
+		return
+	}
+
+	if h.Game.State == game.StatePlaying && alivePlayersCount == 1 {
+		h.Game.State = game.StateFinished
+		h.Hub.Broadcast(h.Game.GetUpdateStateMessage())
+		h.lobbyEndGame()
 		return
 	}
 }

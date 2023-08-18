@@ -67,3 +67,24 @@ func (h *Handlers) lobbyStartGame() {
 
 	h.gameStart()
 }
+
+func (h *Handlers) lobbyEndGame() {
+	h.Game.Countdown = game.CountdownGameEnd
+	h.Game.State = game.StateFinished
+
+	for {
+		if h.Game.State != game.StateFinished {
+			return
+		}
+		h.Hub.Broadcast(h.Game.GetUpdateStateMessage())
+		h.Game.Countdown = h.Game.Countdown - 1000
+		if h.Game.Countdown < 0 {
+			h.Game.Countdown = 0
+			break
+		}
+		time.Sleep(1 * time.Second)
+	}
+
+	h.Game = game.NewGame()
+	h.Hub.Broadcast(h.Game.GetUpdateStateMessage())
+}

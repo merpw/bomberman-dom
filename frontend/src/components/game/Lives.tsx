@@ -17,10 +17,17 @@ const Lives = () => {
 
 const LifeCard: FC<{ player: Player }> = ({ player }) => {
   const color = useHeroColor(player.name);
+
+  const isDead = player.lives <= 0;
+
   return (
     <span>
       <span style={{ color }}>{player.name}: </span>
-      <span>{player.lives}❤️</span>
+      {isDead ? (
+        <span className={"text-red-500"}>💀</span>
+      ) : (
+        <span>{player.lives}❤️</span>
+      )}
     </span>
   );
 };

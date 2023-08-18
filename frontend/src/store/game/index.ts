@@ -2,12 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { WebSocketMessage, WSHandler } from "#/store/ws/handlers.ts";
 
 export type GameState =
+  | "empty"
   | "alone"
   | "waiting"
   | "starting"
   | "playing"
   | "finished"
-  | null;
+  | undefined;
 
 /** 0 = empty, 1 = wall */
 export type CellType = 0 | 1;
@@ -38,7 +39,7 @@ const initialState: {
   players?: Player[];
   bombs?: Bomb[];
 } = {
-  state: null,
+  state: undefined,
   countdown: null,
   map: undefined,
   players: undefined,

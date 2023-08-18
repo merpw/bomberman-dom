@@ -10,6 +10,14 @@ const Game: FC = () => {
   const mapWidth = useAppSelector((state) => state.game.map?.length);
   const mapHeight = useAppSelector((state) => state.game.map?.[0]?.length);
 
+  const isDead = useAppSelector((state) => {
+    const username = state.users.username;
+    const player = state.game.players?.find(
+      (player) => player.name === username
+    );
+    return player ? player.lives <= 0 : undefined;
+  });
+
   if (mapWidth === undefined || mapHeight === undefined) {
     return null;
   }
@@ -25,7 +33,7 @@ const Game: FC = () => {
         className={"m-auto"}
       >
         <Field />
-        <Controls />
+        {!isDead && <Controls />}
       </svg>
     </div>
   );

@@ -41,6 +41,7 @@ type Bomb struct {
 type State string
 
 const (
+	StateEmpty    State = "empty"
 	StateAlone    State = "alone"
 	StateWaiting  State = "waiting"
 	StateStarting State = "starting"
@@ -60,10 +61,13 @@ type Game struct {
 
 func NewGame() *Game {
 	return &Game{
-		Map:       [MapSize][MapSize]Cell{},
-		Players:   [MaxPlayerCount]Player{},
+		Players: [MaxPlayerCount]Player{},
+		State:   StateEmpty,
+		Map:     [MapSize][MapSize]Cell{},
+
 		Countdown: -1,
-		mux:       sync.Mutex{},
+
+		mux: sync.Mutex{},
 	}
 }
 

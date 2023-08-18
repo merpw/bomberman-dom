@@ -21,6 +21,13 @@ func (h *Handlers) gamePlayerMove(message ws.Message, client *ws.Client) {
 	player := h.Game.GetPlayer(client)
 	if player == nil {
 		log.Println("WARN: player not found")
+		client.SendError("Unexpected error", true)
+		return
+	}
+
+	if player.Lives == 0 {
+		log.Println("WARN: player is dead")
+		client.SendError("You are already dead", true)
 		return
 	}
 
@@ -32,6 +39,12 @@ func (h *Handlers) gamePlayerPlaceBomb(_ ws.Message, client *ws.Client) {
 	player := h.Game.GetPlayer(client)
 	if player == nil {
 		log.Println("WARN: player not found")
+		return
+	}
+
+	if player.Lives == 0 {
+		log.Println("WARN: player is dead")
+		client.SendError("You are already dead", true)
 		return
 	}
 
@@ -51,10 +64,15 @@ func (h *Handlers) gamePlayerPlaceBomb(_ ws.Message, client *ws.Client) {
 		for i := range h.Game.Players {
 			if h.Game.Players[i].Cell == damagedCell {
 				h.Game.Players[i].Lives--
-				h.Hub.Broadcast(h.Game.GetPlayerMessage(&h.Game.Players[i]))
-				if player.Lives == 0 {
-					// TODO: handle player death
+				if h.Game.Players[i].Lives == 0 {
+					h.Game.Players[i].Cell = nil
+					h.Hub.Broadcast(h.Game.GetPlayerMessage(&h.Game.Players[i]))
+					h.gameCheck()
+					if h.Game.State == game.StateFinished {
+						return
+					}
 				}
+				h.Hub.Broadcast(h.Game.GetPlayerMessage(&h.Game.Players[i]))
 			}
 		}
 	}

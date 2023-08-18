@@ -46,13 +46,20 @@ type PlayerMessage struct {
 }
 
 func (g *Game) GetPlayerMessage(player *Player) ws.Message {
+	coords := Coords{
+		X: -1,
+		Y: -1,
+	}
+
+	if player.Cell != nil {
+		coords.X = player.Cell.X
+		coords.Y = player.Cell.Y
+	}
+
 	return ws.NewMessage("game/updatePlayer", PlayerMessage{
-		Name:  player.Name,
-		Lives: player.Lives,
-		Coords: Coords{
-			X: player.Cell.X,
-			Y: player.Cell.Y,
-		},
+		Name:   player.Name,
+		Lives:  player.Lives,
+		Coords: coords,
 	})
 }
 
