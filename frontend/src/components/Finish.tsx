@@ -1,14 +1,17 @@
 import { useAppSelector } from "#/store/hooks.ts";
-import useHeroColor from "#/components/game/heroes.ts";
+import useHeroColor from "#/hooks/heroes.ts";
 
 const Finish = () => {
-  const players = useAppSelector((state) => state.game.players);
+  const onlinePlayers = useAppSelector((state) => {
+    const users = state.users.users;
+    return state.game.players?.filter((player) => users.includes(player.name));
+  });
 
-  const winner = players?.find((player) => player.lives > 0);
+  const winner = onlinePlayers?.find((player) => player.lives > 0);
 
   const color = useHeroColor(winner?.name || "");
 
-  if (!players || !winner) return null;
+  if (!onlinePlayers || !winner) return null;
 
   return (
     <div className={"flex flex-col items-center justify-center h-full"}>

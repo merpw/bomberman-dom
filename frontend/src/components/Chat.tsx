@@ -3,7 +3,7 @@ import { FC, FormEvent, useEffect } from "react";
 import wsActions from "#/store/ws/actions.ts";
 import { useUsername } from "#/hooks/username.ts";
 import { ChatMessage } from "#/store/chats";
-import useHeroColor from "#/components/game/heroes.ts";
+import useHeroColor from "#/hooks/heroes.ts";
 
 const Chat = () => {
   const dispatch = useAppDispatch();
