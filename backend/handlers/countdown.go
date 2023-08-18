@@ -65,7 +65,5 @@ func (h *Handlers) countdownGameStart() {
 		time.Sleep(1 * time.Second)
 	}
 
-	h.Game.State = game.StatePlaying
-	h.Game.Countdown = 0
-	h.Hub.Broadcast(h.Game.GetUpdateStateMessage())
+	h.gameStart()
 }

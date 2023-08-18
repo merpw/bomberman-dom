@@ -17,3 +17,19 @@ func (g *Game) GetUpdateStateMessage() ws.Message {
 		Countdown: countdown,
 	})
 }
+
+type MapMessage struct {
+	Map [MapSize][MapSize]CellType `json:"map"`
+}
+
+func (g *Game) GetMapMessage() ws.Message {
+	var gameMap [MapSize][MapSize]CellType
+	for x := 0; x < MapSize; x++ {
+		for y := 0; y < MapSize; y++ {
+			gameMap[x][y] = g.Map[x][y].Type
+		}
+	}
+	return ws.NewMessage("game/updateMap", MapMessage{
+		Map: gameMap,
+	})
+}

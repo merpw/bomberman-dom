@@ -5,11 +5,11 @@ import (
 	"sync"
 )
 
-type CellType string
+type CellType int
 
 const (
-	CellTypeEmpty CellType = "empty"
-	CellTypeWall  CellType = "wall"
+	CellTypeEmpty CellType = 0
+	CellTypeWall  CellType = 1
 )
 
 type Cell struct {
@@ -27,7 +27,7 @@ type Player struct {
 const MapSize = 10
 
 const MaxPlayerCount = 4
-const MinPlayerCount = 2
+const MinPlayerCount = 1
 
 type State string
 
@@ -82,9 +82,9 @@ func (g *Game) GetPlayer(client *ws.Client) *Player {
 	g.mux.Lock()
 	defer g.mux.Unlock()
 
-	for _, player := range g.Players {
-		if player.Client == client {
-			return &player
+	for i := range g.Players {
+		if g.Players[i].Client == client {
+			return &g.Players[i]
 		}
 	}
 	return nil
