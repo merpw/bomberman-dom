@@ -1,5 +1,5 @@
 import { navigate } from "vite-plugin-ssr/client/router";
-import { useSetUsername, useUsername } from "#/helpers/name.ts";
+import { useSetUsername, useUsername } from "#/hooks/username.ts";
 import wsActions from "#/store/ws/actions.ts";
 import { useAppDispatch } from "#/store/hooks.ts";
 

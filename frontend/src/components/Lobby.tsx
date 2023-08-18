@@ -1,6 +1,6 @@
 import { useAppSelector } from "#/store/hooks.ts";
 import { FC } from "react";
-import useHeroColor from "#/components/game/heroes.ts";
+import useHeroColor from "#/hooks/heroes.ts";
 
 const Lobby = () => {
   const users = useAppSelector((state) => state.users.users);

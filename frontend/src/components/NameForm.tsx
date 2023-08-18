@@ -1,7 +1,7 @@
 import { FC, FormEventHandler, useState } from "react";
 import { navigate } from "vite-plugin-ssr/client/router";
 import { getGameStatus } from "#/api/game-status.ts";
-import { useSetUsername } from "#/helpers/name.ts";
+import { useSetUsername } from "#/hooks/username.ts";
 
 const NameForm: FC = () => {
   const [error, setError] = useState<string | undefined>(undefined);

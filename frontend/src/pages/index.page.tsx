@@ -4,7 +4,7 @@ import { navigate } from "vite-plugin-ssr/client/router";
 import NameForm from "#/components/NameForm.tsx";
 
 import GlobalLayout from "#/layouts/Global.tsx";
-import { useUsername } from "#/helpers/name.ts";
+import { useUsername } from "#/hooks/username.ts";
 
 export const Layout = GlobalLayout;
 

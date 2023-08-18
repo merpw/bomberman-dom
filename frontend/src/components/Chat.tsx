@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "#/store/hooks.ts";
 import { FC, FormEvent, useEffect } from "react";
 import wsActions from "#/store/ws/actions.ts";
-import { useUsername } from "#/helpers/name.ts";
+import { useUsername } from "#/hooks/username.ts";
 import { ChatMessage } from "#/store/chats";
 import useHeroColor from "#/components/game/heroes.ts";
 
