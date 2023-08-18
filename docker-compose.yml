@@ -1,0 +1,18 @@
+# Docker compose file for two services: frontend and backend. Forwards port 80 to the frontend container.
+
+version: "3.7"
+
+services:
+  frontend:
+    environment:
+      - BACKEND_REWRITE_URL=http://backend:8080
+      - BACKEND_WS_REWRITE_URL=ws://backend:8080
+    build:
+      context: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+  backend:
+    build:
+      context: backend
