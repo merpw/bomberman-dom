@@ -33,6 +33,8 @@ func (g *Game) MovePlayer(player *Player, direction MoveDirection) (tookSecret b
 		return false
 	}
 
+	player.Direction = direction
+
 	var targetCell *Cell
 	switch direction {
 	case MoveDirectionUp:

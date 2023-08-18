@@ -33,6 +33,7 @@ export type Player = {
   x: number;
   y: number;
   powerUp?: PowerUp;
+  direction?: "up" | "down" | "left" | "right";
 };
 
 export type Bomb = {

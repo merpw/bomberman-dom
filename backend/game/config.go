@@ -19,7 +19,7 @@ const WallDensity = 0.4
 const MoveCooldown = 100 * time.Millisecond
 
 // MoveSpeed is the time it takes to move from one cell to another
-const MoveSpeed = 100 * time.Millisecond
+const MoveSpeed = 150 * time.Millisecond
 
 const MaxBombCount = 3
 
