@@ -49,7 +49,7 @@ const NameForm: FC = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h1>Choose your name</h1>
+      <h1 className={"font-pixel"}>Choose your name</h1>
       <input
         className={"input"}
         type="text"
