@@ -1,15 +1,22 @@
 import { FC } from "react";
 import { Bomb } from "#/store/game";
-import { DamagedCellAsset } from "#/components/game/assets/bombs";
+import { BombAsset, DamagedCellAsset } from "#/components/game/assets/bombs";
 
 const Bomb: FC<{ bomb: Bomb }> = ({ bomb }) => {
-  console.log("bomb", bomb);
+  const asset = BombAsset;
+
   return (
     <>
       {bomb.damagedCells ? (
         <DamagedCells damagedCells={bomb.damagedCells} />
       ) : (
-        <rect x={bomb.x} y={bomb.y} width={1} height={1} fill="red" />
+        <image
+          href={asset}
+          width={0.8}
+          height={0.8}
+          x={bomb.x + 0.1}
+          y={bomb.y + 0.1}
+        />
       )}
     </>
   );

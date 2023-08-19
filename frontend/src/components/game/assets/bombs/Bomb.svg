@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg height="100%" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 1024 1024" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+<svg height="100%" stroke-miterlimit="10"
+     style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1"
+     viewBox="0 0 1024 1024" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
 <defs/>
-<g id="Layer-1">
-<path d="M122.83 510.772C122.83 296.21 296.767 122.272 511.33 122.272C725.892 122.272 899.83 296.21 899.83 510.772C899.83 725.335 725.892 899.272 511.33 899.272C296.767 899.272 122.83 725.335 122.83 510.772Z" fill="none" opacity="1" stroke="#fff400" stroke-linecap="butt" stroke-linejoin="round" stroke-width="41.5434"/>
-<path d="M503.783 258.402L503.783 520.028" fill="none" opacity="1" stroke="#fff400" stroke-linecap="butt" stroke-linejoin="round" stroke-width="41.5434"/>
-<path d="M740.681 503.509L483.04 503.509" fill="none" opacity="1" stroke="#fff400" stroke-linecap="butt" stroke-linejoin="round" stroke-width="41.5434"/>
+    <g id="Layer-1">
+<path d="M122.83 510.772C122.83 296.21 296.767 122.272 511.33 122.272C725.892 122.272 899.83 296.21 899.83 510.772C899.83 725.335 725.892 899.272 511.33 899.272C296.767 899.272 122.83 725.335 122.83 510.772Z"
+      fill="none" opacity="1" stroke="#fff400" stroke-linecap="butt" stroke-linejoin="round" stroke-width="41.5434"/>
+        <path d="M503.783 258.402L503.783 520.028" fill="none" opacity="1" stroke="#fff400" stroke-linecap="butt"
+              stroke-linejoin="round" stroke-width="41.5434"
+        >
+<!--  add animation rotating around center of the circle -->
+            <animateTransform attributeName="transform" attributeType="XML" dur="12s" from="0 503 512" to="360 503 503"
+                              type="rotate" repeatCount="indefinite"/>
+
+
+        </path>
+        <path d="M740.681 503.509L483.04 503.509" fill="none" opacity="1" stroke="#fff400" stroke-linecap="butt"
+              stroke-linejoin="round" stroke-width="41.5434">
+            <animateTransform attributeName="transform" attributeType="XML" dur="1s" from="0 503 512" to="360 503 503"
+                              type="rotate" repeatCount="indefinite"/>
+        </path>
 </g>
 </svg>
