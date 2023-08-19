@@ -29,7 +29,11 @@ const (
 )
 
 func (g *Game) MovePlayer(player *Player, direction MoveDirection) (tookSecret bool) {
-	if time.Now().Sub(player.PrevMoveTime) < MoveCooldown {
+	cooldown := MoveCooldown
+	if player.PowerUp == PowerUpTypeSpeed {
+		cooldown = MoveCooldown / 2
+	}
+	if time.Now().Sub(player.PrevMoveTime) < cooldown {
 		return false
 	}
 
@@ -51,17 +55,8 @@ func (g *Game) MovePlayer(player *Player, direction MoveDirection) (tookSecret b
 		return false
 	}
 
-	defer func() {
-		player.PrevMoveTime = time.Now()
-	}()
-
-	if player.PowerUp == PowerUpTypeSpeed {
-		time.Sleep(MoveSpeed / 2)
-	} else {
-		time.Sleep(MoveSpeed)
-	}
-
 	player.Cell = targetCell
+	player.PrevMoveTime = time.Now()
 
 	if targetCell.Secret != "" {
 		switch targetCell.Secret {
