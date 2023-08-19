@@ -2,6 +2,7 @@ import { useAppSelector } from "#/store/hooks.ts";
 import { FC } from "react";
 import useHeroColor from "#/hooks/heroes.ts";
 import CountDown from "#/components/CountDown.tsx";
+import PlayerAssets from "#/components/game/assets/players";
 
 const Lobby = () => {
   const users = useAppSelector((state) => state.users.users);
@@ -9,8 +10,8 @@ const Lobby = () => {
   const emptySpots = users.filter((user) => user === "").length;
 
   return (
-    <div className={"mx-auto"}>
-      <h1>Lobby</h1>
+    <div className={"flex flex-col items-center mt-20 mr-10"}>
+      <h1 className={"text-2xl"}>Lobby</h1>
       <p>Game state: {state}</p>
       <CountDown className={"font-mono text-6xl"} />
       {users.length && (
@@ -18,28 +19,41 @@ const Lobby = () => {
           {users.length - emptySpots} of {users.length} players joined
         </p>
       )}
-      <div className={"flex gap-2"}>
+      <div className={"grid grid-cols-2 gap-2 md:grid-cols-4 min-w-[70%]"}>
         {users.map((user, key) => (
-          <UserCard user={user} key={key} />
+          <UserCard user={user} userNumber={key} key={key} />
         ))}
       </div>
     </div>
   );
 };
 
-const UserCard: FC<{ user: string }> = ({ user }) => {
+const UserCard: FC<{ user: string; userNumber: number }> = ({
+  user,
+  userNumber,
+}) => {
   const color = useHeroColor(user);
-  if (user === "")
-    return <div className={"bg-base-200 p-5 rounded"}>Empty spot</div>;
+
+  const playerAssets = PlayerAssets[userNumber] || null;
+  const asset = playerAssets?.down ?? null;
 
   return (
     <div
-      className={"bg-base-200 p-5 text-info rounded"}
-      style={{
-        color,
-      }}
+      className={
+        "p-5 w-full rounded max-w-full flex flex-col items-center justify-center" +
+        " " +
+        (user === "" ? "bg-base-200 opacity-70" : "bg-base-100")
+      }
+      style={{ color }}
     >
-      {user}
+      {user ? (
+        <>
+          <img src={asset} alt={`Image of ${user}`} className={"h-[90%]"} />
+          <p className={"mt-2"}>{user}</p>
+        </>
+      ) : (
+        "Empty"
+      )}
     </div>
   );
 };
