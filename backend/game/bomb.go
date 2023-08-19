@@ -24,7 +24,7 @@ func (g *Game) ExplodeBomb(player *Player, bomb *Bomb) {
 	bombPower := BombPower
 
 	if player.PowerUp == PowerUpTypeBombPower {
-		bombPower++
+		bombPower += PowerUpEffectBombPower
 	}
 
 	g.ExplodeCell(bomb, bombCell.X, bombCell.Y)

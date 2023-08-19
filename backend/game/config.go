@@ -42,3 +42,11 @@ var PowerUps = []PowerUpType{
 	PowerUpTypeSpeed,
 	PowerUpTypeLife,
 }
+
+const (
+	PowerUpEffectBombPower = 1
+	PowerUpEffectSpeed     = 1.5
+	PowerUpEffectLife      = 1
+
+	// PowerUpEffectBombCount = 1 - TODO: maybe implement this
+)

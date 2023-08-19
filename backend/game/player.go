@@ -31,7 +31,7 @@ const (
 func (g *Game) MovePlayer(player *Player, direction MoveDirection) (tookSecret bool) {
 	cooldown := MoveCooldown
 	if player.PowerUp == PowerUpTypeSpeed {
-		cooldown = MoveCooldown / 2
+		cooldown = time.Duration(float64(cooldown) / PowerUpEffectSpeed)
 	}
 	if time.Now().Sub(player.PrevMoveTime) < cooldown {
 		return false
@@ -61,7 +61,7 @@ func (g *Game) MovePlayer(player *Player, direction MoveDirection) (tookSecret b
 	if targetCell.Secret != "" {
 		switch targetCell.Secret {
 		case PowerUpTypeLife:
-			player.Lives++
+			player.Lives += PowerUpEffectLife
 		case PowerUpTypeBombCount:
 			player.PowerUp = PowerUpTypeBombCount
 		case PowerUpTypeBombPower:
