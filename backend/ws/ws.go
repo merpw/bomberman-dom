@@ -66,6 +66,11 @@ func (h *Hub) UpgradeHandler(w http.ResponseWriter, r *http.Request) {
 	h.Register(client)
 
 	go func() {
+		defer func() {
+			if err := recover(); err != nil {
+				log.Println("ERROR 500: ", err)
+			}
+		}()
 		client.Read(h.MessageHandler)
 		log.Println("Connection closed: ", r.RemoteAddr)
 		h.MessageHandler(NewMessage("internal/disconnect", nil), client)

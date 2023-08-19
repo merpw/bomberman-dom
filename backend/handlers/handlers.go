@@ -28,7 +28,14 @@ func (h *Handlers) PrimaryHandler() ws.MessageHandler {
 
 		for _, event := range events {
 			if event.Type == message.Type {
-				go event.Handler(message, client)
+				go func() {
+					defer func() {
+						if err := recover(); err != nil {
+							log.Println("ERROR 500: ", err, debug.Stack())
+						}
+					}()
+					event.Handler(message, client)
+				}()
 				return
 			}
 		}

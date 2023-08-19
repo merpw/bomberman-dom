@@ -25,7 +25,7 @@ func (h *Handlers) gamePlayerMove(message ws.Message, client *ws.Client) {
 		return
 	}
 
-	if player.Lives == 0 {
+	if player.Lives < 1 {
 		log.Println("WARN: player is dead")
 		client.SendError("You are already dead", true)
 		return

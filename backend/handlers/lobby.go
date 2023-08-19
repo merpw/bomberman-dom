@@ -18,12 +18,12 @@ func (h *Handlers) lobbyCheck() {
 	}
 
 	if h.Game.GetPlayersCount() == game.MaxPlayerCount {
-		go h.lobbyStartGame()
+		h.lobbyStartGame()
 		return
 	}
 
 	if h.Game.GetPlayersCount() >= game.MinPlayerCount {
-		go h.lobbyJoin()
+		h.lobbyJoin()
 		return
 	}
 }
@@ -45,7 +45,7 @@ func (h *Handlers) lobbyJoin() {
 		time.Sleep(1 * time.Second)
 	}
 
-	go h.lobbyStartGame()
+	h.lobbyStartGame()
 }
 
 func (h *Handlers) lobbyStartGame() {
