@@ -1,6 +1,8 @@
 package game
 
 func (g *Game) PlaceBomb(player *Player) (bomb *Bomb) {
+	g.mux.Lock()
+	defer g.mux.Unlock()
 	for i := range player.Bombs[:len(player.Bombs)-1] {
 		if player.Bombs[i].Cell == nil {
 			player.Bombs[i].Cell = player.Cell
@@ -56,11 +58,17 @@ func (g *Game) ExplodeBomb(player *Player, bomb *Bomb) {
 }
 
 func (g *Game) RemoveBomb(bomb *Bomb) {
+	g.mux.Lock()
+	defer g.mux.Unlock()
+
 	bomb.Cell = nil
 	bomb.DamagedCells = nil
 }
 
 func (g *Game) ExplodeCell(bomb *Bomb, x, y int) bool {
+	g.mux.Lock()
+	defer g.mux.Unlock()
+
 	if x <= 0 || x >= MapSize-1 || y <= 0 || y >= MapSize-1 {
 		return true
 	}

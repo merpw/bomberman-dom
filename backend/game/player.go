@@ -5,6 +5,9 @@ import (
 )
 
 func (g *Game) SpawnPlayers() {
+	g.mux.Lock()
+	defer g.mux.Unlock()
+
 	for i, player := range g.GetActivePlayers() {
 		switch i {
 		case 0:
@@ -29,6 +32,9 @@ const (
 )
 
 func (g *Game) MovePlayer(player *Player, direction MoveDirection) (tookSecret bool) {
+	g.mux.Lock()
+	defer g.mux.Unlock()
+
 	cooldown := MoveCooldown
 	if player.PowerUp == PowerUpTypeSpeed {
 		cooldown = time.Duration(float64(cooldown) / PowerUpEffectSpeed)
