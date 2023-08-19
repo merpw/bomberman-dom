@@ -21,6 +21,10 @@ func (g *Game) PlaceBomb(player *Player) (bomb *Bomb) {
 func (g *Game) ExplodeBomb(player *Player, bomb *Bomb) {
 	bombCell := bomb.Cell
 
+	if bombCell == nil {
+		return
+	}
+
 	bombPower := BombPower
 
 	if player.PowerUp == PowerUpTypeBombPower {

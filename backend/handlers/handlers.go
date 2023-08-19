@@ -31,7 +31,7 @@ func (h *Handlers) PrimaryHandler() ws.MessageHandler {
 				go func() {
 					defer func() {
 						if err := recover(); err != nil {
-							log.Println("ERROR 500: ", err, debug.Stack())
+							log.Printf("ERROR 500: %s\n%s", err, debug.Stack())
 						}
 					}()
 					event.Handler(message, client)
