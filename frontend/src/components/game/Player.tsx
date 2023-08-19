@@ -1,44 +1,31 @@
 import { FC } from "react";
 import { Player } from "#/store/game";
-import useHeroColor from "#/hooks/heroes.ts";
 import { useIsUserConnected } from "#/hooks/users.ts";
+import { useAppSelector } from "#/store/hooks.ts";
+import PlayerAssets from "#/components/game/assets/players";
 
 const Player: FC<{ player: Player }> = ({ player }) => {
-  const color = useHeroColor(player.name);
-
   const isConnected = useIsUserConnected(player.name);
-  if (!isConnected) return null;
+
+  const playerNumber = useAppSelector(
+    (state) => state.game.players?.indexOf(player) ?? -1
+  );
+
+  const playerAssets = PlayerAssets[playerNumber] || null;
+
+  if (!isConnected || !playerAssets) return null;
+
+  const asset = playerAssets[player.direction ?? "down"];
 
   return (
-    <>
-      <rect
-        className={"transition-all"}
-        x={player.x}
-        y={player.y}
-        width={1}
-        height={1}
-        fill={color}
-      />
-      <text
-        className={"transition-all"}
-        x={player.x + 0.5}
-        y={player.y + 0.5}
-        fill={"black"}
-        textAnchor={"middle"}
-        dominantBaseline={"middle"}
-        fontSize={0.5}
-      >
-        {player.direction === "up"
-          ? "/\\"
-          : player.direction === "down"
-          ? "\\/"
-          : player.direction === "left"
-          ? "<"
-          : player.direction === "right"
-          ? ">"
-          : null}
-      </text>
-    </>
+    <image
+      className={"transition-all"}
+      href={asset}
+      x={player.x}
+      y={player.y}
+      width={1}
+      height={1}
+    />
   );
 };
 
