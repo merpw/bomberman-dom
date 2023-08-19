@@ -21,10 +21,10 @@ const Player: FC<{ player: Player }> = ({ player }) => {
     <image
       className={"transition-all"}
       href={asset}
-      x={player.x}
-      y={player.y}
-      width={1}
-      height={1}
+      x={player.x + 0.05}
+      y={player.y + 0.07}
+      width={0.9}
+      height={0.9}
     />
   );
 };
