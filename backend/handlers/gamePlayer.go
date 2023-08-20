@@ -66,11 +66,11 @@ func (h *Handlers) gamePlayerPlaceBomb(_ ws.Message, client *ws.Client) {
 		// no bombs left
 		return
 	}
-	h.Hub.Broadcast(h.Game.GetBombsMessage(player))
+	h.Hub.Broadcast(h.Game.GetBombsMessage())
 
 	time.Sleep(game.BombTime)
 	h.Game.ExplodeBomb(player, bomb)
-	h.Hub.Broadcast(h.Game.GetBombsMessage(player))
+	h.Hub.Broadcast(h.Game.GetBombsMessage())
 	h.Hub.Broadcast(h.Game.GetMapMessage())
 
 	for _, damagedCell := range bomb.DamagedCells {
@@ -93,5 +93,5 @@ func (h *Handlers) gamePlayerPlaceBomb(_ ws.Message, client *ws.Client) {
 	time.Sleep(game.BombExplodeTime)
 
 	h.Game.RemoveBomb(bomb)
-	h.Hub.Broadcast(h.Game.GetBombsMessage(player))
+	h.Hub.Broadcast(h.Game.GetBombsMessage())
 }

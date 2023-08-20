@@ -96,24 +96,28 @@ type BombsMessage struct {
 	Bombs []bombCellData `json:"bombs,omitempty"`
 }
 
-func (g *Game) GetBombsMessage(player *Player) ws.Message {
+func (g *Game) GetBombsMessage() ws.Message {
 	var bombs []bombCellData
-	for _, bomb := range player.Bombs {
-		if bomb.Cell != nil {
-			var damagedCells []Coords
-			for _, cell := range bomb.DamagedCells {
-				damagedCells = append(damagedCells, Coords{
-					X: cell.X,
-					Y: cell.Y,
+
+	for _, player := range g.Players {
+		for _, bomb := range player.Bombs {
+			if bomb.Cell != nil {
+				var damagedCells []Coords
+				for _, cell := range bomb.DamagedCells {
+					damagedCells = append(damagedCells, Coords{
+						X: cell.X,
+						Y: cell.Y,
+					})
+				}
+				bombs = append(bombs, bombCellData{
+					X:            bomb.Cell.X,
+					Y:            bomb.Cell.Y,
+					DamagedCells: damagedCells,
 				})
 			}
-			bombs = append(bombs, bombCellData{
-				X:            bomb.Cell.X,
-				Y:            bomb.Cell.Y,
-				DamagedCells: damagedCells,
-			})
 		}
 	}
+
 	return ws.NewMessage("game/updateBombs", BombsMessage{
 		Bombs: bombs,
 	})
