@@ -3,16 +3,27 @@ import { FC } from "react";
 import useHeroColor from "#/hooks/heroes.ts";
 import CountDown from "#/components/CountDown.tsx";
 import PlayerAssets from "#/components/game/assets/players";
+import { GameState } from "#/store/game";
+
+const StateMessages: Record<GameState & string, string> = {
+  alone: "Not enough players to start",
+  waiting: "Waiting for players",
+  starting: "Game starting",
+  playing: "Game in progress",
+  finished: "Game finished",
+  empty: "Game not started",
+};
 
 const Lobby = () => {
   const users = useAppSelector((state) => state.users.users);
   const state = useAppSelector((state) => state.game.state);
   const emptySpots = users.filter((user) => user === "").length;
 
+  const stateMessage = (state && StateMessages[state]) || "Unknown state";
+
   return (
     <div className={"flex flex-col items-center mt-20 mr-10"}>
-      <h1 className={"text-2xl"}>Lobby</h1>
-      <p>Game state: {state}</p>
+      <h1 className={"text-2xl"}>{stateMessage}</h1>
       <CountDown className={"font-mono text-6xl"} />
       {users.length && (
         <p>
