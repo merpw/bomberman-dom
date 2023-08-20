@@ -1,6 +1,7 @@
 import { Fragment, StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import type { PageContextClient } from "./types";
+import { HelmetProvider } from "react-helmet-async";
 
 import "#/globals.css";
 import { PageContext } from "./usePageContext.ts";
@@ -17,11 +18,13 @@ export async function render(pageContext: PageContextClient) {
 
   const page = (
     <StrictMode>
-      <PageContext.Provider value={pageContext}>
-        <Layout>
-          <Page {...pageProps} />
-        </Layout>
-      </PageContext.Provider>
+      <HelmetProvider>
+        <PageContext.Provider value={pageContext}>
+          <Layout>
+            <Page {...pageProps} />
+          </Layout>
+        </PageContext.Provider>
+      </HelmetProvider>
     </StrictMode>
   );
   const container = document.getElementById("root")!;

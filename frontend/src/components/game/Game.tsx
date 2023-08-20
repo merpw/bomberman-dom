@@ -14,7 +14,7 @@ const Game: FC = () => {
   const isDead = useAppSelector((state) => {
     const username = state.users.username;
     const player = state.game.players?.find(
-      (player) => player.name === username
+      (player) => player.name === username,
     );
     return player ? player.lives <= 0 : undefined;
   });
@@ -24,12 +24,12 @@ const Game: FC = () => {
   }
 
   return (
-    <div className={"h-full w-full flex flex-col bg-base-300"}>
+    <div className={"h-full w-full flex flex-col"}>
       <Lives />
 
       <svg
-        width={500}
-        height={500}
+        width={"100%"}
+        height={"100%"}
         viewBox={`0 0 ${mapWidth} ${mapHeight}`}
         className={"m-auto"}
       >
@@ -72,9 +72,7 @@ const Players = () => {
 
   return (
     <g>
-      {players?.map((player) => (
-        <Player key={player.name} player={player} />
-      ))}
+      {players?.map((player) => <Player key={player.name} player={player} />)}
     </g>
   );
 };
@@ -82,24 +80,14 @@ const Players = () => {
 const Bombs = () => {
   const bombs = useAppSelector((state) => state.game.bombs);
 
-  return (
-    <g>
-      {bombs?.map((bomb, key) => (
-        <Bomb bomb={bomb} key={key} />
-      ))}
-    </g>
-  );
+  return <g>{bombs?.map((bomb, key) => <Bomb bomb={bomb} key={key} />)}</g>;
 };
 
 const Secrets = () => {
   const secrets = useAppSelector((state) => state.game.secrets);
 
   return (
-    <g>
-      {secrets?.map((secret, key) => (
-        <Secret secret={secret} key={key} />
-      ))}
-    </g>
+    <g>{secrets?.map((secret, key) => <Secret secret={secret} key={key} />)}</g>
   );
 };
 

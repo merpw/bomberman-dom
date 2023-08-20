@@ -48,20 +48,34 @@ const NameForm: FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1 className={"font-pixel"}>Choose your name</h1>
+    <form
+      onSubmit={handleSubmit}
+      className={"flex flex-col items-center m-auto gap-5"}
+    >
+      <h1 className={"font-ibm_mono text-5xl text-neutral text-center my-5"}>
+        BOMBERMAN-<span className={"text-success"}>BIM!</span>
+      </h1>
       <input
-        className={"input"}
+        className={
+          "z-50 bg-transparent border-b border-neutral text-center focus:outline-none w-72"
+        }
         type="text"
         name={"name"}
+        minLength={1}
+        maxLength={10}
         placeholder="Enter your name"
         required
       />
 
-      <button type="submit" className={"btn"}>
+      <button
+        type="submit"
+        className={
+          "z-50 btn btn-primary text-secondary rounded-none w-36 font-ibm_mono"
+        }
+      >
         Submit
       </button>
-      {error && <p>{error}</p>}
+      {error && <p className={"text-error"}>{error}</p>}
     </form>
   );
 };

@@ -1,11 +1,11 @@
 // TODO: improve colors
 import { useAppSelector } from "#/store/hooks.ts";
 
-export const HeroColors = ["#ee6666", "#016701", "#0000FF", "#949400"];
+export const HeroColors = ["#008146", "#98f0f6", "#ffa1d2", "#874cc0"];
 
 const useHeroColor = (username: string) => {
   const users = useAppSelector((state) => state.users.users);
-  const index = users.indexOf(username);
+  const index = username ? users.indexOf(username) : -1;
   return HeroColors[index];
 };
 
