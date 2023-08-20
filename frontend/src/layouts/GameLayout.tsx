@@ -12,7 +12,9 @@ const GameLayout: FC<{ children: ReactNode }> = ({ children }) => {
     <GlobalLayout>
       <ConnectionManager />
       <main className={"grow"}>{children}</main>
-      <aside className={"bg-base-100 rounded w-72"}>
+      <aside
+        className={"ml-auto flex flex-col bg-base-100 rounded w-72 min-h-0"}
+      >
         <UserInfo />
         <Chat />
       </aside>

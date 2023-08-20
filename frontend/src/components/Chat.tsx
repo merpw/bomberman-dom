@@ -6,7 +6,7 @@ import useHeroColor from "#/hooks/heroes.ts";
 
 const Chat = () => {
   return (
-    <div className={"mx-1 flex flex-col max-h-[90%]"}>
+    <div className={"mx-1 flex flex-col min-h-0 mb-5"}>
       <ChatMessages />
       <ChatInput />
     </div>
