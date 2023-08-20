@@ -66,16 +66,22 @@ func (h *Handlers) gamePlayerPlaceBomb(_ ws.Message, client *ws.Client) {
 		// no bombs left
 		return
 	}
-	h.Hub.Broadcast(h.Game.GetBombsMessage(player.Name))
+	h.Hub.Broadcast(h.Game.GetBombsMessage())
 
 	time.Sleep(game.BombTime)
+
+	player = h.Game.GetPlayer(client)
+	if player.Lives < 1 {
+		return
+	}
+
 	h.Game.ExplodeBomb(player.Name, bombNumber)
-	h.Hub.Broadcast(h.Game.GetBombsMessage(player.Name))
+	h.Hub.Broadcast(h.Game.GetBombsMessage())
 	h.Hub.Broadcast(h.Game.GetMapMessage())
 
 	hasKills := h.Game.KillDamagedPlayers(player.Name, bombNumber)
 
-	h.Hub.Broadcast(h.Game.GetBombsMessage(player.Name))
+	h.Hub.Broadcast(h.Game.GetBombsMessage())
 
 	for _, player := range h.Game.GetPlayers() {
 		if player.Name == "" {
@@ -92,7 +98,11 @@ func (h *Handlers) gamePlayerPlaceBomb(_ ws.Message, client *ws.Client) {
 	}
 
 	time.Sleep(game.BombExplodeTime)
+	player = h.Game.GetPlayer(client)
+	if player.Lives < 1 {
+		return
+	}
 
 	h.Game.RemoveBomb(player.Name, bombNumber)
-	h.Hub.Broadcast(h.Game.GetBombsMessage(player.Name))
+	h.Hub.Broadcast(h.Game.GetBombsMessage())
 }
