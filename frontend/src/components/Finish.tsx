@@ -19,7 +19,13 @@ const Finish = () => {
 
   return (
     <div className={"flex flex-col items-center justify-center h-full"}>
-      <h1 className={"text-[17rem] font-ibm_mono text-success my-11"}>BIM!</h1>
+      {username === winner.name ? (
+        <h1 className={"text-[17rem] font-ibm_mono text-success my-11"}>
+          BIM!
+        </h1>
+      ) : (
+        <h1 className={"text-[17rem] font-ibm_mono text-error my-11"}>FAIL</h1>
+      )}
       <p className={"text-lg"}>
         <span style={{ color }}>
           {username === winner.name ? "You" : winner.name}{" "}
