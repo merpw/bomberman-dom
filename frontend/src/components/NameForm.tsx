@@ -52,12 +52,12 @@ const NameForm: FC = () => {
       onSubmit={handleSubmit}
       className={"flex flex-col items-center m-auto gap-5"}
     >
-      <h1 className={"font-pixel text-5xl text-neutral text-center my-5"}>
+      <h1 className={"font-ibm_mono text-5xl text-neutral text-center my-5"}>
         BOMBERMAN-<span className={"text-success"}>BIM!</span>
       </h1>
       <input
         className={
-          "z-50 bg-base-100 border-b border-neutral text-center focus:outline-none w-72"
+          "z-50 bg-transparent border-b border-neutral text-center focus:outline-none w-72"
         }
         type="text"
         name={"name"}
@@ -69,7 +69,9 @@ const NameForm: FC = () => {
 
       <button
         type="submit"
-        className={"btn btn-primary text-secondary rounded-none w-36"}
+        className={
+          "z-50 btn btn-primary text-secondary rounded-none w-36 font-ibm_mono"
+        }
       >
         Submit
       </button>

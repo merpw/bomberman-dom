@@ -19,7 +19,7 @@ const Lobby = () => {
           {users.length - emptySpots} of {users.length} players joined
         </p>
       )}
-      <div className={"grid grid-cols-2 gap-2 md:grid-cols-4 min-w-[70%]"}>
+      <div className={"grid grid-cols-2 gap-2 md:grid-cols-4 min-w-[70%] mt-5"}>
         {users.map((user, key) => (
           <UserCard user={user} userNumber={key} key={key} />
         ))}
@@ -48,8 +48,8 @@ const UserCard: FC<{ user: string; userNumber: number }> = ({
     >
       {user ? (
         <>
-          <img src={asset} alt={`Image of ${user}`} className={"h-[90%]"} />
-          <p className={"mt-2"}>{user}</p>
+          <p className={"mb-2 text-2xl"}>{user}</p>
+          <img src={asset} alt={`Image of ${user}`} className={"h-[70%]"} />
         </>
       ) : (
         "Empty"

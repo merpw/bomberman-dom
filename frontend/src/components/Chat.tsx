@@ -82,14 +82,17 @@ const ChatInput = () => {
   };
 
   return (
-    <form onSubmit={onSubmit} className={"flex flex-col gap-1"}>
+    <form onSubmit={onSubmit} className={"z-50 flex flex-col gap-1"}>
       <input
         type="text"
         name={"content"}
         className={"input input-bordered"}
         autoComplete={"off"}
       />
-      <button type="submit" className={"btn ml-auto"}>
+      <button
+        type="submit"
+        className={"btn btn-neutral rounded-none font-ibm_mono w-full  ml-auto"}
+      >
         Send
       </button>
     </form>
