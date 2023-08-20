@@ -14,12 +14,12 @@ type StateMessage struct {
 
 func (g *Game) GetUpdateStateMessage() ws.Message {
 	var countdown *int64
-	if g.Countdown > 0 {
-		milliseconds := g.Countdown.Milliseconds()
+	if g.countdown > 0 {
+		milliseconds := g.countdown.Milliseconds()
 		countdown = &milliseconds
 	}
 	return ws.NewMessage("game/updateState", StateMessage{
-		State:     g.State,
+		State:     g.state,
 		Countdown: countdown,
 	})
 }
@@ -40,14 +40,14 @@ func (g *Game) GetMapMessage() ws.Message {
 
 	for x := 0; x < MapSize; x++ {
 		for y := 0; y < MapSize; y++ {
-			gameMap[x][y] = g.Map[x][y].Type
-			if g.Map[x][y].Type == CellTypeEmpty && g.Map[x][y].Secret != "" {
+			gameMap[x][y] = g.fieldMap[x][y].Type
+			if g.fieldMap[x][y].Type == CellTypeEmpty && g.fieldMap[x][y].Secret != "" {
 				secrets = append(secrets, SecretData{
 					Coords: Coords{
 						X: x,
 						Y: y,
 					},
-					Type: g.Map[x][y].Secret,
+					Type: g.fieldMap[x][y].Secret,
 				})
 			}
 		}
@@ -66,7 +66,9 @@ type PlayerMessage struct {
 	Coords
 }
 
-func (g *Game) GetPlayerMessage(player *Player) ws.Message {
+func (g *Game) GetPlayerMessage(playerName string) ws.Message {
+	player := g.getPlayerPointer(playerName)
+
 	coords := Coords{
 		X: -1,
 		Y: -1,
@@ -96,7 +98,8 @@ type BombsMessage struct {
 	Bombs []bombCellData `json:"bombs,omitempty"`
 }
 
-func (g *Game) GetBombsMessage(player *Player) ws.Message {
+func (g *Game) GetBombsMessage(playerName string) ws.Message {
+	player := g.getPlayerPointer(playerName)
 	var bombs []bombCellData
 	for _, bomb := range player.Bombs {
 		if bomb.Cell != nil {

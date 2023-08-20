@@ -6,13 +6,13 @@ import (
 )
 
 func (h *Handlers) lobbyCheck() {
-	if h.Game.State == game.StatePlaying {
+	if h.Game.GetState() == game.StatePlaying {
 		return
 	}
 
 	if h.Game.GetPlayersCount() < game.MinPlayerCount {
-		h.Game.State = game.StateAlone
-		h.Game.Countdown = game.CountdownUsersJoin
+		h.Game.SetState(game.StateAlone)
+		h.Game.SetCountdown(game.CountdownUsersJoin)
 		h.Hub.Broadcast(h.Game.GetUpdateStateMessage())
 		return
 	}
@@ -29,17 +29,17 @@ func (h *Handlers) lobbyCheck() {
 }
 
 func (h *Handlers) lobbyJoin() {
-	h.Game.Countdown = game.CountdownUsersJoin
-	h.Game.State = game.StateWaiting
+	h.Game.SetCountdown(game.CountdownUsersJoin)
+	h.Game.SetState(game.StateWaiting)
 
 	for {
-		if h.Game.State != game.StateWaiting {
+		if h.Game.GetState() != game.StateWaiting {
 			return
 		}
 		h.Hub.Broadcast(h.Game.GetUpdateStateMessage())
-		h.Game.Countdown = h.Game.Countdown - time.Second
-		if h.Game.Countdown < 0 {
-			h.Game.Countdown = 0
+		h.Game.DecreaseCountdown(time.Second)
+		if h.Game.GetCountdown() < 0 {
+			h.Game.SetCountdown(0)
 			break
 		}
 		time.Sleep(1 * time.Second)
@@ -49,17 +49,17 @@ func (h *Handlers) lobbyJoin() {
 }
 
 func (h *Handlers) lobbyStartGame() {
-	h.Game.Countdown = game.CountdownGameStart
-	h.Game.State = game.StateStarting
+	h.Game.SetCountdown(game.CountdownGameStart)
+	h.Game.SetState(game.StateStarting)
 
 	for {
-		if h.Game.State != game.StateStarting {
+		if h.Game.GetState() != game.StateStarting {
 			return
 		}
 		h.Hub.Broadcast(h.Game.GetUpdateStateMessage())
-		h.Game.Countdown = h.Game.Countdown - time.Second
-		if h.Game.Countdown < 0 {
-			h.Game.Countdown = 0
+		h.Game.DecreaseCountdown(time.Second)
+		if h.Game.GetCountdown() < 0 {
+			h.Game.SetCountdown(0)
 			break
 		}
 		time.Sleep(1 * time.Second)
@@ -69,17 +69,17 @@ func (h *Handlers) lobbyStartGame() {
 }
 
 func (h *Handlers) lobbyEndGame() {
-	h.Game.Countdown = game.CountdownGameEnd
-	h.Game.State = game.StateFinished
+	h.Game.SetCountdown(game.CountdownGameEnd)
+	h.Game.SetState(game.StateFinished)
 
 	for {
-		if h.Game.State != game.StateFinished {
+		if h.Game.GetState() != game.StateFinished {
 			return
 		}
 		h.Hub.Broadcast(h.Game.GetUpdateStateMessage())
-		h.Game.Countdown = h.Game.Countdown - time.Second
-		if h.Game.Countdown < 0 {
-			h.Game.Countdown = 0
+		h.Game.DecreaseCountdown(time.Second)
+		if h.Game.GetCountdown() < 0 {
+			h.Game.SetCountdown(0)
 			break
 		}
 		time.Sleep(1 * time.Second)

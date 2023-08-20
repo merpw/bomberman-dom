@@ -57,22 +57,22 @@ const (
 )
 
 type Game struct {
-	Players [MaxPlayerCount]Player
-	State   State
-	Map     [MapSize][MapSize]Cell
+	players  [MaxPlayerCount]Player
+	state    State
+	fieldMap [MapSize][MapSize]Cell
 
-	Countdown time.Duration
+	countdown time.Duration
 
 	mux sync.Mutex
 }
 
 func NewGame() *Game {
 	return &Game{
-		Players: [MaxPlayerCount]Player{},
-		State:   StateEmpty,
-		Map:     [MapSize][MapSize]Cell{},
+		players:  [MaxPlayerCount]Player{},
+		state:    StateEmpty,
+		fieldMap: [MapSize][MapSize]Cell{},
 
-		Countdown: -1,
+		countdown: -1,
 
 		mux: sync.Mutex{},
 	}
@@ -82,9 +82,9 @@ func (g *Game) AddPlayer(name string, client *ws.Client) {
 	g.mux.Lock()
 	defer g.mux.Unlock()
 
-	for i, player := range g.Players {
+	for i, player := range g.players {
 		if player.Name == "" {
-			g.Players[i] = Player{
+			g.players[i] = Player{
 				Name:   name,
 				Client: client,
 				Lives:  LifeCount,
@@ -94,29 +94,28 @@ func (g *Game) AddPlayer(name string, client *ws.Client) {
 	}
 }
 
-func (g *Game) GetPlayer(client *ws.Client) *Player {
+func (g *Game) GetPlayer(client *ws.Client) Player {
 	g.mux.Lock()
 	defer g.mux.Unlock()
 
-	for i := range g.Players {
-		if g.Players[i].Client == client {
-			return &g.Players[i]
+	for _, player := range g.players {
+		if player.Client == client {
+			return player
+		}
+	}
+	return Player{}
+}
+
+func (g *Game) getPlayerPointer(name string) *Player {
+	g.mux.Lock()
+	defer g.mux.Unlock()
+
+	for i := range g.players {
+		if g.players[i].Name == name {
+			return &g.players[i]
 		}
 	}
 	return nil
-}
-
-func (g *Game) GetActivePlayers() []*Player {
-	g.mux.Lock()
-	defer g.mux.Unlock()
-
-	var activePlayers []*Player
-	for i := range g.Players {
-		if g.Players[i].Name != "" {
-			activePlayers = append(activePlayers, &g.Players[i])
-		}
-	}
-	return activePlayers
 }
 
 func (g *Game) GetPlayersCount() int {
@@ -124,7 +123,7 @@ func (g *Game) GetPlayersCount() int {
 	defer g.mux.Unlock()
 
 	count := 0
-	for _, player := range g.Players {
+	for _, player := range g.players {
 		if player.Name != "" {
 			count++
 		}
@@ -136,10 +135,64 @@ func (g *Game) RemovePlayer(playerName string) {
 	g.mux.Lock()
 	defer g.mux.Unlock()
 
-	for i, p := range g.Players {
+	for i, p := range g.players {
 		if p.Name == playerName {
-			g.Players[i] = Player{}
+			g.players[i] = Player{}
 			break
 		}
 	}
+}
+
+func (g *Game) UpdatePlayer(newPlayer Player) {
+	g.mux.Lock()
+	defer g.mux.Unlock()
+
+	for i, p := range g.players {
+		if p.Name == newPlayer.Name {
+			g.players[i] = newPlayer
+			break
+		}
+	}
+}
+
+func (g *Game) GetPlayers() []Player {
+	g.mux.Lock()
+	defer g.mux.Unlock()
+
+	return g.players[:]
+}
+
+func (g *Game) GetState() State {
+	g.mux.Lock()
+	defer g.mux.Unlock()
+
+	return g.state
+}
+
+func (g *Game) SetState(state State) {
+	g.mux.Lock()
+	defer g.mux.Unlock()
+
+	g.state = state
+}
+
+func (g *Game) GetCountdown() time.Duration {
+	g.mux.Lock()
+	defer g.mux.Unlock()
+
+	return g.countdown
+}
+
+func (g *Game) SetCountdown(duration time.Duration) {
+	g.mux.Lock()
+	defer g.mux.Unlock()
+
+	g.countdown = duration
+}
+
+func (g *Game) DecreaseCountdown(duration time.Duration) {
+	g.mux.Lock()
+	defer g.mux.Unlock()
+
+	g.countdown -= duration
 }

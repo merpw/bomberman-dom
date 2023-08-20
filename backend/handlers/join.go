@@ -18,7 +18,7 @@ func (h *Handlers) join(message ws.Message, client *ws.Client) {
 		return
 	}
 
-	if h.Game.State == game.StatePlaying || h.Game.State == game.StateStarting {
+	if h.Game.GetState() == game.StatePlaying || h.Game.GetState() == game.StateStarting {
 		log.Println("WARN: game is already started")
 		client.SendError("Game is already started", true)
 		return
@@ -40,7 +40,7 @@ func (h *Handlers) join(message ws.Message, client *ws.Client) {
 		return
 	}
 
-	for _, player := range h.Game.Players {
+	for _, player := range h.Game.GetPlayers() {
 		if name == player.Name {
 			log.Println("WARN: name already taken")
 			client.SendError("Name is already taken", true)
@@ -50,8 +50,8 @@ func (h *Handlers) join(message ws.Message, client *ws.Client) {
 
 	h.Game.AddPlayer(name, client)
 
-	users := make([]string, 0, len(h.Game.Players))
-	for _, player := range h.Game.Players {
+	users := make([]string, 0, len(h.Game.GetPlayers()))
+	for _, player := range h.Game.GetPlayers() {
 		users = append(users, player.Name)
 	}
 

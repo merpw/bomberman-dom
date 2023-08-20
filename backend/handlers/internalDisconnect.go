@@ -6,7 +6,7 @@ import (
 
 func (h *Handlers) internalDisconnect(_ ws.Message, client *ws.Client) {
 	player := h.Game.GetPlayer(client)
-	if player == nil {
+	if player.Name == "" {
 		return
 	}
 
@@ -14,8 +14,8 @@ func (h *Handlers) internalDisconnect(_ ws.Message, client *ws.Client) {
 
 	h.Game.RemovePlayer(playerName)
 
-	users := make([]string, 0, len(h.Game.Players))
-	for _, player := range h.Game.Players {
+	users := make([]string, 0, len(h.Game.GetPlayers()))
+	for _, player := range h.Game.GetPlayers() {
 		users = append(users, player.Name)
 	}
 

@@ -22,7 +22,7 @@ func (g *Game) InitMap() {
 			} else {
 				cellType = getRandomCellType()
 			}
-			g.Map[x][y] = Cell{
+			g.fieldMap[x][y] = Cell{
 				X:    x,
 				Y:    y,
 				Type: cellType,
@@ -31,35 +31,35 @@ func (g *Game) InitMap() {
 	}
 
 	// clear top left corner and bottom right corner for the first two players
-	g.Map[1][1].Type = CellTypeEmpty
-	g.Map[1][2].Type = CellTypeEmpty
-	g.Map[2][1].Type = CellTypeEmpty
+	g.fieldMap[1][1].Type = CellTypeEmpty
+	g.fieldMap[1][2].Type = CellTypeEmpty
+	g.fieldMap[2][1].Type = CellTypeEmpty
 
-	g.Map[MapSize-2][MapSize-2].Type = CellTypeEmpty
-	g.Map[MapSize-2][MapSize-3].Type = CellTypeEmpty
-	g.Map[MapSize-3][MapSize-2].Type = CellTypeEmpty
+	g.fieldMap[MapSize-2][MapSize-2].Type = CellTypeEmpty
+	g.fieldMap[MapSize-2][MapSize-3].Type = CellTypeEmpty
+	g.fieldMap[MapSize-3][MapSize-2].Type = CellTypeEmpty
 
 	playersCount := g.GetPlayersCount()
 
 	if playersCount >= 3 {
 		// clear top right corner for third player
-		g.Map[MapSize-2][1].Type = CellTypeEmpty
-		g.Map[MapSize-2][2].Type = CellTypeEmpty
-		g.Map[MapSize-3][1].Type = CellTypeEmpty
+		g.fieldMap[MapSize-2][1].Type = CellTypeEmpty
+		g.fieldMap[MapSize-2][2].Type = CellTypeEmpty
+		g.fieldMap[MapSize-3][1].Type = CellTypeEmpty
 	}
 
 	if playersCount == 4 {
 		// clear bottom left corner for fourth player
-		g.Map[1][MapSize-2].Type = CellTypeEmpty
-		g.Map[1][MapSize-3].Type = CellTypeEmpty
-		g.Map[2][MapSize-2].Type = CellTypeEmpty
+		g.fieldMap[1][MapSize-2].Type = CellTypeEmpty
+		g.fieldMap[1][MapSize-3].Type = CellTypeEmpty
+		g.fieldMap[2][MapSize-2].Type = CellTypeEmpty
 	}
 
 	var breakableWalls []*Cell
-	for i := range g.Map {
-		for j := range g.Map[i] {
-			if g.Map[i][j].Type == CellTypeWall {
-				breakableWalls = append(breakableWalls, &g.Map[i][j])
+	for i := range g.fieldMap {
+		for j := range g.fieldMap[i] {
+			if g.fieldMap[i][j].Type == CellTypeWall {
+				breakableWalls = append(breakableWalls, &g.fieldMap[i][j])
 			}
 		}
 	}

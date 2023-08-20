@@ -15,14 +15,14 @@ type GameStatus struct {
 // Status is an HTTP handler that returns the current GameStatus of the server
 func (h *Handlers) Status(w http.ResponseWriter, r *http.Request) {
 
-	users := make([]string, 0, len(h.Game.Players))
-	for _, client := range h.Game.Players {
+	users := make([]string, 0, len(h.Game.GetPlayers()))
+	for _, client := range h.Game.GetPlayers() {
 		users = append(users, client.Name)
 	}
 
 	status := GameStatus{
 		Users:     users,
-		GameState: h.Game.State,
+		GameState: h.Game.GetState(),
 	}
 
 	// send GameStatus:

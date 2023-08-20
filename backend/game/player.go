@@ -8,16 +8,20 @@ func (g *Game) SpawnPlayers() {
 	g.mux.Lock()
 	defer g.mux.Unlock()
 
-	for i, player := range g.GetActivePlayers() {
+	for i := range g.players {
+		player := &g.players[i]
+		if player.Name == "" {
+			continue
+		}
 		switch i {
 		case 0:
-			player.Cell = &g.Map[1][1]
+			player.Cell = &g.fieldMap[1][1]
 		case 1:
-			player.Cell = &g.Map[MapSize-2][MapSize-2]
+			player.Cell = &g.fieldMap[MapSize-2][MapSize-2]
 		case 2:
-			player.Cell = &g.Map[MapSize-2][1]
+			player.Cell = &g.fieldMap[MapSize-2][1]
 		case 3:
-			player.Cell = &g.Map[1][MapSize-2]
+			player.Cell = &g.fieldMap[1][MapSize-2]
 		}
 	}
 }
@@ -31,7 +35,9 @@ const (
 	MoveDirectionRight MoveDirection = "right"
 )
 
-func (g *Game) MovePlayer(player *Player, direction MoveDirection) (tookSecret bool) {
+func (g *Game) MovePlayer(playerName string, direction MoveDirection) (tookSecret bool) {
+	player := g.getPlayerPointer(playerName)
+
 	g.mux.Lock()
 	defer g.mux.Unlock()
 
@@ -48,13 +54,13 @@ func (g *Game) MovePlayer(player *Player, direction MoveDirection) (tookSecret b
 	var targetCell *Cell
 	switch direction {
 	case MoveDirectionUp:
-		targetCell = &g.Map[player.Cell.X][player.Cell.Y-1]
+		targetCell = &g.fieldMap[player.Cell.X][player.Cell.Y-1]
 	case MoveDirectionDown:
-		targetCell = &g.Map[player.Cell.X][player.Cell.Y+1]
+		targetCell = &g.fieldMap[player.Cell.X][player.Cell.Y+1]
 	case MoveDirectionLeft:
-		targetCell = &g.Map[player.Cell.X-1][player.Cell.Y]
+		targetCell = &g.fieldMap[player.Cell.X-1][player.Cell.Y]
 	case MoveDirectionRight:
-		targetCell = &g.Map[player.Cell.X+1][player.Cell.Y]
+		targetCell = &g.fieldMap[player.Cell.X+1][player.Cell.Y]
 	}
 
 	if targetCell.Type != CellTypeEmpty {

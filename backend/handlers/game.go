@@ -3,12 +3,12 @@ package handlers
 import "backend/game"
 
 func (h *Handlers) gameCheck() {
-	if h.Game.State != game.StatePlaying {
+	if h.Game.GetState() != game.StatePlaying {
 		h.lobbyCheck()
 	}
 
 	var alivePlayersCount int
-	for _, player := range h.Game.GetActivePlayers() {
+	for _, player := range h.Game.GetPlayers() {
 		if player.Lives > 0 {
 			alivePlayersCount++
 		}
@@ -20,8 +20,8 @@ func (h *Handlers) gameCheck() {
 		return
 	}
 
-	if h.Game.State == game.StatePlaying && alivePlayersCount == 1 {
-		h.Game.State = game.StateFinished
+	if h.Game.GetState() == game.StatePlaying && alivePlayersCount == 1 {
+		h.Game.SetState(game.StateFinished)
 		h.Hub.Broadcast(h.Game.GetUpdateStateMessage())
 		h.lobbyEndGame()
 		return
@@ -29,8 +29,8 @@ func (h *Handlers) gameCheck() {
 }
 
 func (h *Handlers) gameStart() {
-	h.Game.State = game.StatePlaying
-	h.Game.Countdown = -1
+	h.Game.SetState(game.StatePlaying)
+	h.Game.SetCountdown(-1)
 	h.Hub.Broadcast(h.Game.GetUpdateStateMessage())
 
 	h.Game.InitMap()
@@ -38,7 +38,9 @@ func (h *Handlers) gameStart() {
 
 	h.Game.SpawnPlayers()
 
-	for _, player := range h.Game.GetActivePlayers() {
-		h.Hub.Broadcast(h.Game.GetPlayerMessage(player))
+	for _, player := range h.Game.GetPlayers() {
+		if player.Name != "" {
+			h.Hub.Broadcast(h.Game.GetPlayerMessage(player.Name))
+		}
 	}
 }

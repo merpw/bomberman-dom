@@ -14,7 +14,7 @@ type chatMessageItem struct {
 // chatMessage is a handler for chat/message event
 func (h *Handlers) chatMessage(message ws.Message, client *ws.Client) {
 	player := h.Game.GetPlayer(client)
-	if player == nil {
+	if player.Name == "" {
 		log.Println("WARN: player not found")
 		return
 	}
